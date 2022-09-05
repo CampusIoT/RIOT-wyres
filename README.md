@@ -6,7 +6,7 @@ The [original firmware](https://github.com/wyres/mynewt_app_iocontrol) has been 
 
 This repository contains the firmware implementation with [RIOT OS](https://github.com/RIOT-OS/RIOT).
 
-![wyres_base](boards/wyres_base.jpg) ![wyres_proto](boards/wyres_proto.jpg)
+![wyres_base](docs/wyres_base.jpg) ![wyres_proto](docs/wyres_proto.jpg)
 
 ## Getting started
 
