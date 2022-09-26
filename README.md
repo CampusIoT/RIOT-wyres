@@ -19,3 +19,6 @@ EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=wyres_base
 ## Requirements
 * STLink v2 programmer
 * FTDI (USB Serial adapter)
+
+## Buy
+* [Wyld Things @ Tindie](https://www.tindie.com/stores/wyld-things/)
