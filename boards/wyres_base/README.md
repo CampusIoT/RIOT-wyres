@@ -61,13 +61,6 @@ Connect the board's pins to the STLink flasher
 
 https://github.com/wyres/mynewt-wbasev2-bsp/blob/master/w_base/include/bsp/bsp_defs.h
 
-## Getting started
-
-```bash
-cd ~/github/RIOT-OS/RIOT
-cd examples/hello-world
-EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=nucleo-l151cc
-```
 
 ## Requirements
 * STLink v2 programmer
@@ -83,11 +76,11 @@ EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=nucleo-l151c
 ```bash
 mkdir -p ~/github/wyres
 git clone git@github.com:wyres/mynewt_app_iocontrol.git ~/github/wyres/mynewt_app_iocontrol
-cp newt.sh ~/github/wyres/mynewt_app_iocontrol
+cp newt.sh hex_maker.sh ~/github/wyres/mynewt_app_iocontrol
 
 cd  ~/github/wyres
 cd mynewt_app_iocontrol
-chmod +x newt.sh
+chmod +x *.sh
 ./newt.sh version
 ./newt.sh help
 ```
@@ -129,14 +122,15 @@ pkg.description: WProto based target for EU868 with external sensors on gpio
 
 ```bash
 TARGET=wbasev2_io_eu868_river_dev
-./newt.sh build targets/$TARGET
+./hex_maker.sh $TARGET
 ```
 
 Work in progress ...
 ```
+Building target wbasev2_io_eu868_river_dev : starting
 WARNING: apache-mynewt-core: Repo version missing from compatibility map
 * Warning: Failure parsing "/workspace/repos/lorawan/lorawan_wrapper/syscfg.yml": [:20]: mapping values are not allowed in this context; ignoring package /workspace/repos/lorawan/lorawan_wrapper.
-Building target targets/wbasev2_io_eu868_none_dev
+Building target targets/wbasev2_io_eu868_river_dev
 Error: Could not resolve package dependency: @lorawan/lorawan_wrapper; depender: loraapi_KLK
 ```
 
@@ -145,8 +139,7 @@ Error: Could not resolve package dependency: @lorawan/lorawan_wrapper; depender:
 
 ## Console
 
-Open the serial console of the LoRa E5 board
-
+Open the serial console of the board (Groove UART connector to USB serial adapter)
 ```bash
 brew install tio
 tio -L
@@ -161,4 +154,14 @@ make term
 or
 ```bash
 minicom -s
+```
+
+## Build with RIOT OS (Work in Progress)
+
+### Getting started
+
+```bash
+cd ~/github/RIOT-OS/RIOT
+cd examples/hello-world
+EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=nucleo-l151cc
 ```
