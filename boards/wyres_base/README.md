@@ -27,21 +27,34 @@ Card hardware:
 Apache MynewT implementation : https://github.com/wyres/mynewt-wbasev2-bsp
 
 
-## Flashing
+## Flashing with STLink Nucleo SWD
 
 Connect the board's pins to the STLink flasher
 
-| STLink Nucleo SWD                 | Color  | Wyres Base  |
-|-----------------------------------|--------|-------------|
-| VDD_TARGET (VDD from application) | Red    | Pin 3: VDD  |
-| SWCLK (clock)                     | Yellow | Pin 4: CLK  |
-| GND (ground)                      | Black  | Pin 2: GND  |
-| SWDIO (SWD data input/output)     | Blue   | Pin 5: DIO  |
-| NRST (RESET of target STM32)      | Green  | Pin 1: NRST |
+| STLink Nucleo SWD                        | Color  | Wyres Base  |
+|------------------------------------------|--------|-------------|
+| Pin 1: VDD_TARGET (VDD from application) | Red    | Pin 3: VDD  |
+| Pin 2: SWCLK (clock)                     | Yellow | Pin 4: CLK  |
+| Pin 3: GND (ground)                      | Black  | Pin 2: GND  |
+| Pin 4: SWDIO (SWD data input/output)     | Blue   | Pin 5: DIO  |
+| Pin 5: NRST (RESET of target STM32)      | Green  | Pin 1: NRST |
 
 
 ![STLink](stlink-01.jpg)
 ![STLink](stlink-02.jpg)
+
+
+## Flashing with Chinese STLink Clone Programmer
+
+| STLink Clone SWD                         | Color  | Wyres Base  |
+|------------------------------------------|--------|-------------|
+| Pin 9: VDD_TARGET (VDD from application) | Red    | Pin 3: VDD  |
+| Pin 8: SWCLK (clock)                     | Yellow | Pin 4: CLK  |
+| Pin 7: GND (ground)                      | Black  | Pin 2: GND  |
+| Pin 6: SWDIO (SWD data input/output)     | Blue   | Pin 5: DIO  |
+| Pin 1: NRST (RESET of target STM32)      | Green  | Pin 1: NRST |
+
+![STLink V2 Clone header](stlinkv2_clone_header.png)
 
 
 ## Pinout
@@ -63,8 +76,69 @@ EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=nucleo-l151c
 * Optional : [PCB for connecting the Tag-Connect probe to the STLink v2 programmer and the USB Serial adapter](./tagconnect_adapter)
 
 
-## Build
+## Build Apache MyNewT-based firmwares
 
+### With Docker
+#### Setup
+```bash
+mkdir -p ~/github/wyres
+git clone git@github.com:wyres/mynewt_app_iocontrol.git ~/github/wyres/mynewt_app_iocontrol
+cp newt.sh ~/github/wyres/mynewt_app_iocontrol
+
+cd  ~/github/wyres
+cd mynewt_app_iocontrol
+chmod +x newt.sh
+./newt.sh version
+./newt.sh help
+```
+
+Uncomment `repo: mynewt-core` in `project.yml`
+
+```bash
+./newt.sh upgrade
+```
+
+> NB: Project dependaencies are downloaded into the directory [./repos](./repos)
+
+### Build
+
+Choose one target:
+
+```bash
+for t in targets/*; do echo $t; grep pkg.description $t/pkg.yml; done
+```
+
+```
+targets/wbasev2_bootloader
+pkg.description: WBase V2 based bootloader target
+targets/wbasev2_io_eu868_ipev_dev
+pkg.description: WBasev2 based target for EU868 with external sensors on gpio for IPEV
+targets/wbasev2_io_eu868_none_dev
+pkg.description: WBasev2 based target for EU868 with external sensors on gpio
+targets/wbasev2_io_eu868_river_dev
+pkg.description: WBasev2 based target for EU868 with external sensors on gpio
+targets/wbasev2_io_eu868_river_prod
+pkg.description: WBasev2 based target for EU868 with external sensors on gpio
+targets/wproto_bootloader
+pkg.description: wProto based bootloader target
+targets/wproto_io_eu868_heating_dev
+pkg.description: WProto based target for EU868 with external control for heating
+targets/wproto_io_eu868_none_dev
+pkg.description: WProto based target for EU868 with external sensors on gpio
+```
+
+```bash
+TARGET=wbasev2_io_eu868_river_dev
+./newt.sh build targets/$TARGET
+```
+
+Work in progress ...
+```
+WARNING: apache-mynewt-core: Repo version missing from compatibility map
+* Warning: Failure parsing "/workspace/repos/lorawan/lorawan_wrapper/syscfg.yml": [:20]: mapping values are not allowed in this context; ignoring package /workspace/repos/lorawan/lorawan_wrapper.
+Building target targets/wbasev2_io_eu868_none_dev
+Error: Could not resolve package dependency: @lorawan/lorawan_wrapper; depender: loraapi_KLK
+```
 
 ## Flash
 
