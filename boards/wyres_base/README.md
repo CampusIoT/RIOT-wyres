@@ -62,12 +62,10 @@ Connect the board's pins to the STLink flasher
 https://github.com/wyres/mynewt-wbasev2-bsp/blob/master/w_base/include/bsp/bsp_defs.h
 
 
-## Requirements
+## Requirements for flashing and debugging
 * STLink v2 programmer
 * FTDI (USB Serial adapter)
-* [Tag-Connect 10-pin no-legs probe](https://www.tag-connect.com/product/tc2050-idc-nl-10-pin-no-legs-cable-with-ribbon-connector).
-* Optional : [PCB for connecting the Tag-Connect probe to the STLink v2 programmer and the USB Serial adapter](./tagconnect_adapter)
-
+* [PCB Clamp 2.54 mm Single Row 5 pins](https://fr.aliexpress.com/item/1005001409579446.html)
 
 ## Build Apache MyNewT-based firmwares
 
