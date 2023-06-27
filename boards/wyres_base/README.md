@@ -163,3 +163,12 @@ cd ~/github/RIOT-OS/RIOT
 cd examples/hello-world
 EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=nucleo-l151cc
 ```
+
+## Dataviz with Grafana
+[Chirpstack v3 decoder](chirpstack3-decoder.js)
+
+[Dashboard](wyres-base.json)
+
+![Dashboard](../../docs/grafana-tour-perret.jpg)
+
+
