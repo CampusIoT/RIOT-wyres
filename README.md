@@ -21,6 +21,7 @@ EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=wyres_base
 ## Requirements
 * STLink v2 programmer
 * FTDI (USB Serial adapter)
+* [PCB Probe 2.54mm Single row, 5 Pins](https://fr.aliexpress.com/item/1005001409579446.html)
 
 ## Buy
 * [Wyld Things @ Tindie](https://www.tindie.com/stores/wyld-things/)

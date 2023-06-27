@@ -21,6 +21,7 @@ Card hardware:
  - 1 'button' GPIO input with limiter resistance on header
  - 1 GPIO on header
 
+![](../../docs/wyldthings-01.jpg)
 
 ## Source code
 
