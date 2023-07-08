@@ -435,6 +435,7 @@ var parsePayload =function(hexString) {
   }
   return decodedPayload;
 };
+
 /**
  * 
  * @param {string} hexString
@@ -444,11 +445,35 @@ var parseAndInterprete= function(hexString) {
   return interpretePayload(parsePayload(hexString));
 };
 
+
+/**
+ * 
+ * @param {string} hexString
+ * @description parse the hexString payload filled and interprete his result regarding to the wyres V3 format payload them flatten the returned object
+ */
+var parseAndInterpreteAndFlatten = function(hexString) {
+  var interpreted = interpretePayload(parsePayload(hexString));
+  var o = {};
+  if (interpreted.data) {
+    for (var key in interpreted.data) {
+      if (interpreted.data.hasOwnProperty(key)) {
+        var val = interpreted.data[key].data;
+        if (val) {
+          o[key] = val;
+        }
+      }
+    }
+  } else {
+    o = interpreted;
+  }
+  return o;
+}
+
 // Decode decodes an array of bytes into an object.
 //  - fPort contains the LoRaWAN fPort number
 //  - bytes is an array of bytes, e.g. [225, 230, 255, 0]
 //  - variables contains the device variables e.g. {"calibration": "3.5"} (both the key / value are of type string)
 // The function must return an object, e.g. {"temperature": 22.5}
 function Decode(fPort, bytes, variables) {
-  return parseAndInterprete(convertFromArray(bytes));
+  return parseAndInterpreteAndFlatten(convertFromArray(bytes));
 }
