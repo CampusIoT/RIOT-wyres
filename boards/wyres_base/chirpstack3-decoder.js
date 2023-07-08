@@ -477,4 +477,3 @@ var parseAndInterpreteAndFlatten = function(hexString) {
 function Decode(fPort, bytes, variables) {
   return parseAndInterpreteAndFlatten(convertFromArray(bytes));
 }
-
