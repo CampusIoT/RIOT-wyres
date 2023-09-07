@@ -1,0 +1,9 @@
+ifneq (,$(filter netdev_default,$(USEMODULE)))
+  USEMODULE += saul_gpio
+endif
+
+ifneq (,$(filter netdev_default,$(USEMODULE)))
+  USEMODULE += sx1272   #Semtech Lora radio sx1272    #ok
+endif
+
+#Accelerometer, altimeter and mems to add

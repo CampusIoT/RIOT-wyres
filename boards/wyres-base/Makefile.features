@@ -1,0 +1,12 @@
+CPU = stm32
+CPU_MODEL = stm32l151cc		#CPU carte wyres v2-revB
+
+# Put defined MCU peripherals here (in alphabetical order)
+FEATURES_PROVIDED += periph_adc			#ok
+FEATURES_PROVIDED += periph_i2c			#ok
+FEATURES_PROVIDED += periph_pwm			#ok
+FEATURES_PROVIDED += periph_spi 		#ok
+FEATURES_PROVIDED += periph_timer		#ok
+FEATURES_PROVIDED += periph_uart 		#ok
+
+
