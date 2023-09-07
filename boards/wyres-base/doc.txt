@@ -22,7 +22,7 @@ Board hardware:
  - Accelero : ST [LIS2DE12](https://github.com/RIOT-OS/RIOT/tree/master/tests/driver_lis2dh12) via I2C 
  - Altimeter : ST [LPS22HB](https://github.com/RIOT-OS/RIOT/tree/master/tests/driver_lpsxxx) via I2C
  - light sensitive trans. on GPIO
- - MEMS microphone on I2S bus
+ - [SPH0641LM4H-1](https://www.knowles.com/docs/default-source/default-document-library/sph0641lm4h-1_morello_datasheet.pdf) MEMS microphone on I2S bus
  - Semtech Lora radio SX1272/SX1261 on SPI bus
  - 2 LEDs via GPIO on-board and via header
  - 1 'power' PWM GPIO (mosfet switched) on header
