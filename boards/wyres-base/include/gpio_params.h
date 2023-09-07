@@ -46,6 +46,11 @@ static const  saul_gpio_params_t saul_gpio_params[] =
         .pin  = LIGHT_SENSOR_SUPPLY_PIN,
         .mode = GPIO_OUT
     },
+    {
+        .name = "BUTTON",
+        .pin  = BUTTON_PIN,
+        .mode = GPIO_IN_PU
+    },
 };
 
 #ifdef __cplusplus

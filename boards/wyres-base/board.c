@@ -24,4 +24,6 @@ void board_init(void)
     gpio_init(LED_RED_PIN, GPIO_OUT);  /* PIN 3 Port A */
     gpio_init(LED_GREEN_PIN, GPIO_OUT);  /* PIN 0 Port A */
     gpio_init(LIGHT_SENSOR_SUPPLY_PIN, GPIO_OUT);  /* PIN 6 Port B */
+    gpio_init(BUTTON_PIN, GPIO_IN);  /* PIN 3 Port B */
+    // TODO PWM for speaker
 }

@@ -70,6 +70,27 @@ extern "C" {
 
 
 /**
+ * @name Speaker PWM
+ * @{
+ */
+#define SPEAKER_PWM_PIN            			GPIO_PIN(PORT_A,1)
+#define SPEAKER_PWM_PORT           			GPIOA
+#define SPEAKER_PWM_MASK           			(1 << 1)
+
+/** @} */
+
+
+/**
+ * @name Button
+ * @{
+ */
+#define BUTTON_PIN            				GPIO_PIN(PORT_B,3)
+#define BUTTON_PORT           				GPIOB
+#define BUTTON_MASK           				(1 << 3)
+
+/** @} */
+
+/**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
  */
 void board_init(void);

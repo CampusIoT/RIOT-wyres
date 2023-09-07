@@ -50,6 +50,8 @@ Board hardware:
     I2C_0_PIN_SCL: 	'MCU_GPIO_PORTB(8)'
 
     TIMER_0_TIM: 	'TIM2'
+    
+    SPEAKER PWM :  'MCU_GPIO_PORTA(1)'
 
 
 
