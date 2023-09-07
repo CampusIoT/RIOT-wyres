@@ -1,11 +1,19 @@
+/*
+ * Copyright (C) 2023 Université Grenoble Alpes
+ *
+ * This file is subject to the terms and conditions of the GNU Lesser General
+ * Public License v2.1. See the file LICENSE in the top level directory for more
+ * details.
+ */
+
 /**
- * @ingroup   boards_stm32l0538-disco
+ * @ingroup     boards_wyres-base
  * @{
  *
  * @file
- * @brief     Board specific configuration of direct mapped GPIOs
+ * @brief       Board specific definitions for the Wyres Base board.
  *
- * @author    Alexandre Abadie <alexandre.abadie@inria.fr>
+ * @author      Tristan Lailler <tristan.lailler@etu.univ-grenoble-alpes.fr
  */
 
 #ifndef GPIO_PARAMS_H
@@ -24,13 +32,13 @@ extern "C" {
 static const  saul_gpio_params_t saul_gpio_params[] =
 {
     {
-        .name = "LED_ROUGE",
-        .pin = LED_ROUGE_PIN,
+        .name = "LED_RED",
+        .pin = LED_RED_PIN,
         .mode = GPIO_OUT
     },
     {
-        .name = "LED_VERTE",
-        .pin = LED_VERTE_PIN,
+        .name = "LED_GREEN",
+        .pin = LED_GREEN_PIN,
         .mode = GPIO_OUT
     },
     {

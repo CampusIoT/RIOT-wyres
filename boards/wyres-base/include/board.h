@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Inria
+ * Copyright (C) 2023 Université Grenoble Alpes
  *
  * This file is subject to the terms and conditions of the GNU Lesser General
  * Public License v2.1. See the file LICENSE in the top level directory for more
@@ -7,13 +7,13 @@
  */
 
 /**
- * @ingroup     boards_stm32l0538-disco
+ * @ingroup     boards_wyres-base
  * @{
  *
  * @file
- * @brief       Board specific definitions for the STM32L0538-DISCO evaluation board.
+ * @brief       Board specific definitions for the Wyres Base board.
  *
- * @author      Alexandre Abadie <alexandre.abadie@inria.fr>
+ * @author      Tristan Lailler <tristan.lailler@etu.univ-grenoble-alpes.fr
  */
 
 #ifndef BOARD_H
@@ -36,21 +36,21 @@ extern "C" {
  * @name Macros for controlling the on-board LEDs.
  * @{
  */
-#define LED_ROUGE_PIN            GPIO_PIN(PORT_A, 15)
-#define LED_ROUGE_PORT           GPIOA
-#define LED_ROUGE_MASK           (1 << 15)
+#define LED_RED_PIN            GPIO_PIN(PORT_A, 15)
+#define LED_RED_PORT           GPIOA
+#define LED_RED_MASK           (1 << 15)
 
-#define LED_ROUGE_ON             (LED_ROUGE_PORT->BSRR |= LED_ROUGE_MASK)
-#define LED_ROUGE_OFF            (LED_ROUGE_PORT->BSRR |= LED_ROUGE_MASK<<16)
-#define LED_ROUGE_TOGGLE         (LED_ROUGE_PORT->ODR  ^= LED_ROUGE_MASK)
+#define LED_RED_ON             (LED_RED_PORT->BSRR |= LED_RED_MASK)
+#define LED_RED_OFF            (LED_RED_PORT->BSRR |= LED_RED_MASK<<16)
+#define LED_RED_TOGGLE         (LED_RED_PORT->ODR  ^= LED_RED_MASK)
 
-#define LED_VERTE_PIN            GPIO_PIN(PORT_A, 0)
-#define LED_VERTE_PORT           GPIOA
-#define LED_VERTE_MASK           (1)
+#define LED_GREEN_PIN            GPIO_PIN(PORT_A, 0)
+#define LED_GREEN_PORT           GPIOA
+#define LED_GREEN_MASK           (1)
 
-#define LED_VERTE_ON             (LED_VERTE_PORT->BSRR |= LED_VERTE_MASK)
-#define LED_VERTE_OFF            (LED_VERTE_PORT->BSRR |= LED_VERTE_MASK<<16)
-#define LED_VERTE_TOGGLE         (LED_VERTE_PORT->ODR  ^= LED_VERTE_MASK)
+#define LED_GREEN_ON             (LED_GREEN_PORT->BSRR |= LED_GREEN_MASK)
+#define LED_GREEN_OFF            (LED_GREEN_PORT->BSRR |= LED_GREEN_MASK<<16)
+#define LED_GREEN_TOGGLE         (LED_GREEN_PORT->ODR  ^= LED_GREEN_MASK)
 /** @} */
 
 /**

@@ -1,39 +1,117 @@
 /**
- * @defgroup    boards_stm32l0538-disco STM32L0538-DISCO
+ * @defgroup    boards_wyres-base Wyres Base
  * @ingroup     boards
- * @brief       Support for the STM32L0538-DISCO board
+ * @brief       Support for the Wyres Base board
 
 ### Introduction
 
-The
-[STM32L0538-DISCO](https://www.st.com/en/evaluation-tools/32l0538discovery.html)
-discovery kit features an ultra low-power stm32l053c8t6 microcontroller with
-64KB of FLASH and 8KB of RAM.
-The board also provides an on-board 2.04" E-paper display (not supported yet).
+The [Wyres Base](https://www.tindie.com/products/wyld-things/lorawan-sensor-unit-kit/) is an LoRaWAN endpoint for indoor/outdoor IoT applications.
+It features an ultra low-power stm32l151cc microcontroller with several sensors.
 
-![STM32L0538-DISCO](https://www.st.com/content/ccc/fragment/product_related/rpn_information/board_photo/group0/67/a2/3f/98/6b/24/4a/27/stm32l0538-discovery.jpg/files/stm32l0538-disco.jpg/_jcr_content/translations/en.stm32l0538-disco.jpg)
+Card revisions
+ - v2 revB (SX1272, RF switch old)
+ - v2 revC/D (SX1272, RF switch Skynet new)) 
+ - v3 revA/B (SX1261/2)
 
-### Supported features
+Card hardware:
+ - STM32L151CC MCU
+ - 256kb flash / 32kb RAM / 8kb EEPROM : MCU based 
+ - UART(1) : MCU based : external grove connector
+ - SPI(2) : MCU based : 1 dedicated for radio, 1 on header
+ - I2C(1) : MCU based : external grove connector
+ - Accelero : ST [LIS2DE12](https://github.com/RIOT-OS/RIOT/tree/master/tests/driver_lis2dh12) via I2C 
+ - Altimeter : ST [LPS22HB](https://github.com/RIOT-OS/RIOT/tree/master/tests/driver_lpsxxx) via I2C
+ - light sensitive trans. on GPIO
+ - MEMS microphone on I2S bus
+ - Semtech Lora radio SX1272 on SPI bus
+ - 2 LEDs via GPIO on-board and via header
+ - 1 'power' PWM GPIO (mosfet switched) on header
+ - 1 'button' GPIO input with limiter resistance on header
+ - 1 GPIO on header
 
-| Peripheral            | Configuration                                                                             |
-|:--------------------- |:----------------------------------------------------------------------------------------- |
-| TIMs                  | TIM2                                                                                      |
-| UARTs                 | USART1 on PA10 (RX), PA9 (TX)                                                             |
-| SPIs                  | SPI1 on PB5 (MOSI), PB4 (MISO), PB3 (SCLK); SPI2 on PB15 (MOSI), PB14 (MISO), PB13 (SCLK) |
+![](../../docs/wyldthings-01.jpg)
+
+### Pinout
+
+    UART_0_PIN_TX: 	'MCU_GPIO_PORTA(9)'	ok
+    UART_0_PIN_RX: 	'MCU_GPIO_PORTA(10)'
+    UART_0_PIN_CTS: 	-1
+    UART_0_PIN_RTS: 	-1
+
+    SPI_0_PIN_MOSI: 'MCU_GPIO_PORTA(7)'
+    SPI_0_PIN_MISO: 'MCU_GPIO_PORTA(6)'
+    SPI_0_PIN_SCK: 	'MCU_GPIO_PORTA(5)'
+    SPI_0_PIN_SS: 	'MCU_GPIO_PORTB(0)'
+
+    SPI_1_PIN_MISO :'MCU_GPIO_PORTB(14)'
+    SPI_1_PIN_SS : 	'MCU_GPIO_PORTB(12)'
+
+    I2C_0_PIN_SDA: 	'MCU_GPIO_PORTB(9)'
+    I2C_0_PIN_SCL: 	'MCU_GPIO_PORTB(8)'
+
+    TIMER_0_TIM: 	'TIM2'
+
+
 
 ### Flashing the board
 
 The board can be flashed using OpenOCD via the on-board ST-Link adapter.
 Then use the following command:
 
-    make BOARD=stm32l0538-disco -C examples/hello-world flash
+    make BOARD=wyres-base -C examples/hello-world flash
+    
+
+## Original source code
+
+Apache MynewT implementation : https://github.com/wyres/mynewt-wbasev2-bsp
+
+
+## Flashing with STLink Nucleo SWD
+
+Connect the board's pins to the STLink flasher
+
+| STLink Nucleo SWD                        | Color  | Wyres Base  |
+|------------------------------------------|--------|-------------|
+| Pin 1: VDD_TARGET (VDD from application) | Red    | Pin 3: VDD  |
+| Pin 2: SWCLK (clock)                     | Yellow | Pin 4: CLK  |
+| Pin 3: GND (ground)                      | Black  | Pin 2: GND  |
+| Pin 4: SWDIO (SWD data input/output)     | Blue   | Pin 5: DIO  |
+| Pin 5: NRST (RESET of target STM32)      | Green  | Pin 1: NRST |
+
+
+![STLink](stlink-01.jpg)
+![STLink](stlink-02.jpg)
+
+
+## Flashing with Chinese STLink Clone Programmer
+
+| STLink Clone SWD                         | Color  | Wyres Base  |
+|------------------------------------------|--------|-------------|
+| Pin 9: VDD_TARGET (VDD from application) | Red    | Pin 3: VDD  |
+| Pin 8: SWCLK (clock)                     | Yellow | Pin 4: CLK  |
+| Pin 7: GND (ground)                      | Black  | Pin 2: GND  |
+| Pin 6: SWDIO (SWD data input/output)     | Blue   | Pin 5: DIO  |
+| Pin 1: NRST (RESET of target STM32)      | Green  | Pin 1: NRST |
+
+![STLink V2 Clone header](stlinkv2_clone_header.png)
+
+
+## Pinout
+
+https://github.com/wyres/mynewt-wbasev2-bsp/blob/master/w_base/include/bsp/bsp_defs.h
+
+
+## Requirements for flashing and debugging
+
+* STLink v2 programmer + FTDI (USB Serial adapter)
+* [PCB Clamp 2.54 mm Single Row 5 pins](https://fr.aliexpress.com/item/1005001409579446.html)
 
 ### STDIO
 
 STDIO is connected to pins PA9 (TX) and PA10 (RX) so an USB to UART adapter is
 required. Use the `term` target to open a terminal:
 
-    make BOARD=stm32l0538-disco -C examples/hello-world term
+    make BOARD=wyres-base -C examples/hello-world term
 
 If an external ST-Link adapter is used, RX and TX pins can be directly connected
 to it. In this case, STDIO is available on /dev/ttyACMx (Linux case).
