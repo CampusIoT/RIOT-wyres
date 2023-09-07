@@ -1,0 +1,14 @@
+loramac help
+
+loramac set deveui 38b8ebe00000f003
+loramac set appeui 0000000000000000
+loramac set appkey 00112233445566778899AABBCCDDEEFF
+loramac save
+
+loramac adr on
+loramac dr 5
+
+loramac join otaa
+loramac link_check
+
+loramac tx HELLO cnf 12
