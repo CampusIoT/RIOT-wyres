@@ -6,15 +6,15 @@
 ### Introduction
 
 The [Wyres Base](https://www.tindie.com/products/wyld-things/lorawan-sensor-unit-kit/) is an LoRaWAN endpoint for indoor/outdoor IoT applications.
-It features an ultra low-power stm32l151cc microcontroller with several sensors.
+It features an ultra low-power [stm32l151cc](https://www.st.com/en/microcontrollers-microprocessors/stm32l151cc.html) microcontroller with several sensors.
 
-Card revisions
+Board revisions
  - v2 revB (SX1272, RF switch old)
  - v2 revC/D (SX1272, RF switch Skynet new)) 
  - v3 revA/B (SX1261/2)
 
-Card hardware:
- - STM32L151CC MCU
+Board hardware:
+ - [STM32L151CC](https://www.st.com/en/microcontrollers-microprocessors/stm32l151cc.html) MCU
  - 256kb flash / 32kb RAM / 8kb EEPROM : MCU based 
  - UART(1) : MCU based : external grove connector
  - SPI(2) : MCU based : 1 dedicated for radio, 1 on header
@@ -23,7 +23,7 @@ Card hardware:
  - Altimeter : ST [LPS22HB](https://github.com/RIOT-OS/RIOT/tree/master/tests/driver_lpsxxx) via I2C
  - light sensitive trans. on GPIO
  - MEMS microphone on I2S bus
- - Semtech Lora radio SX1272 on SPI bus
+ - Semtech Lora radio SX1272/SX1261 on SPI bus
  - 2 LEDs via GPIO on-board and via header
  - 1 'power' PWM GPIO (mosfet switched) on header
  - 1 'button' GPIO input with limiter resistance on header
@@ -33,7 +33,7 @@ Card hardware:
 
 ### Pinout
 
-    UART_0_PIN_TX: 	'MCU_GPIO_PORTA(9)'	ok
+    UART_0_PIN_TX: 	'MCU_GPIO_PORTA(9)'
     UART_0_PIN_RX: 	'MCU_GPIO_PORTA(10)'
     UART_0_PIN_CTS: 	-1
     UART_0_PIN_RTS: 	-1

@@ -3,7 +3,12 @@ ifneq (,$(filter netdev_default,$(USEMODULE)))
 endif
 
 ifneq (,$(filter netdev_default,$(USEMODULE)))
-  USEMODULE += sx1272   #Semtech Lora radio sx1272    #ok
+  LORA_DRIVER ?= sx1272
+  LORA_REGION ?= EU868
+  USEMODULE += $(LORA_DRIVER)
 endif
 
-#Accelerometer, altimeter and mems to add
+# Accelerometer, altimeter and mems to add
+
+# eeprom : STM32L151CC EEPROM_SIZE is not defined into cpu/stm32/include/periph/l1/periph_cpu.h
+CFLAGS +=-DEEPROM_SIZE=8096U
