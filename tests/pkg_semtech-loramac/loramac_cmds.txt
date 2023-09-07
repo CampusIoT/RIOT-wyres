@@ -11,4 +11,5 @@ loramac dr 5
 loramac join otaa
 loramac link_check
 
-loramac tx HELLO cnf 12
+loramac tx HELLO\ RIOT cnf 12
+loramac tx HELLO\ WORLD uncnf 14
