@@ -14,6 +14,7 @@
  * @brief       Board specific definitions for the Wyres Base board.
  *
  * @author      Tristan Lailler <tristan.lailler@etu.univ-grenoble-alpes.fr
+ * @author      Didier Donsez <didier.donsez@univ-grenoble-alpes.fr
  */
 
 #ifndef BOARD_H
@@ -37,7 +38,7 @@ extern "C" {
  * @name Macros for controlling the on-board LEDs.
  * @{
  */
-#define LED0_PIN            	GPIO_PIN(PORT_A,15)
+//#define LED0_PIN            	GPIO_PIN(PORT_A,15)
 #define LED_RED_PIN            	GPIO_PIN(PORT_A,15)
 #define LED_RED_PORT           	GPIOA
 #define LED_RED_MASK           	(1 << 15)
@@ -46,7 +47,7 @@ extern "C" {
 #define LED_RED_OFF            	(LED_RED_PORT->BSRR |= LED_RED_MASK<<16)
 #define LED_RED_TOGGLE         	(LED_RED_PORT->ODR  ^= LED_RED_MASK)
 
-#define LED1_PIN            	GPIO_PIN(PORT_A,0)
+//#define LED1_PIN            	GPIO_PIN(PORT_A,0)
 #define LED_GREEN_PIN           GPIO_PIN(PORT_A,0)
 #define LED_GREEN_PORT          GPIOA
 #define LED_GREEN_MASK          (1)
@@ -72,23 +73,34 @@ extern "C" {
 
 
 /**
- * @name Speaker PWM
+ * @name External GPIO on pad TP3
  * @{
  */
-#define SPEAKER_PWM_PIN            			GPIO_PIN(PORT_A,1)
-#define SPEAKER_PWM_PORT           			GPIOA
-#define SPEAKER_PWM_MASK           			(1 << 1)
+#define EXTERNAL_GPIO_PIN            			GPIO_PIN(PORT_A,8)
+#define EXTERNAL_GPI0_PORT           			GPIOA
+#define EXTERNAL_GPI0_MASK           			(1 << 8)
 
 /** @} */
 
 
 /**
- * @name Button
+ * @name Speaker PWM on pads TP14/1P15
  * @{
  */
-#define BTN0_PIN            				GPIO_PIN(PORT_B,3)
-#define BTN0_PORT           				GPIOB
-#define BTN0_MASK           				(1 << 3)
+#define SPEAKER_PWM_PIN            				GPIO_PIN(PORT_A,1)
+#define SPEAKER_PWM_PORT           				GPIOA
+#define SPEAKER_PWM_MASK           				(1 << 1)
+
+/** @} */
+
+
+/**
+ * @name Button 1 on pads TP7/TP10
+ * @{
+ */
+#define BTN1_PIN            				GPIO_PIN(PORT_B,3)
+#define BTN1_PORT           				GPIOB
+#define BTN1_MASK           				(1 << 3)
 
 /** @} */
 

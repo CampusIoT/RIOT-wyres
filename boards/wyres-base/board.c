@@ -21,9 +21,15 @@
 
 void board_init(void)
 {    /* initialize the boards LEDs */
-    gpio_init(LED_RED_PIN, GPIO_OUT);  /* PIN 3 Port A */
-    gpio_init(LED_GREEN_PIN, GPIO_OUT);  /* PIN 0 Port A */
-    gpio_init(LIGHT_SENSOR_SUPPLY_PIN, GPIO_OUT);  /* PIN 6 Port B */
-    gpio_init(BUTTON_PIN, GPIO_IN);  /* PIN 3 Port B */
-    // TODO PWM for speaker
+    gpio_init(LED_RED_PIN, GPIO_OUT);  /* PA3 */
+    gpio_init(LED_GREEN_PIN, GPIO_OUT);  /* PA0 */
+
+    gpio_init(LIGHT_SENSOR_SUPPLY_PIN, GPIO_OUT);  /* PB6 */
+
+    gpio_init(BTN1_PIN, GPIO_IN);  /* PB3 */
+
+#ifdef TODO
+#error TODO gpio_init for SPEAKER_PWM_PIN
+#error TODO gpio_init for EXTERNAL_GPIO_PIN
+#endif
 }

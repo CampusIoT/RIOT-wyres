@@ -14,6 +14,7 @@
  * @brief       Board specific definitions for the wyres_base board
  *
  * @author      Tristan Lailler <tristan.lailler@etu.univ-grenoble-alpes.fr>
+ * @author      Didier Donsez <didier.donsez@univ-grenoble-alpes.fr
  */
 
 #ifndef PERIPH_CONF_H
@@ -27,6 +28,25 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+//#ifdef TODO
+//#error To be implemented
+/* This board provides a LSE, marked as X1 on the board */
+#ifndef CONFIG_BOARD_HAS_LSE
+#define CONFIG_BOARD_HAS_LSE 1
+#endif
+
+/* This board provides a HSE, marked as X2 on the board */
+#ifndef CONFIG_BOARD_HAS_HSE
+#define CONFIG_BOARD_HAS_HSE 1
+#endif
+
+/* The HSE provides a 8MHz clock */
+#ifndef CONFIG_CLOCK_HSE
+#define CONFIG_CLOCK_HSE MHZ(16)
+#endif
+//#endif
+
 
 /**
  * @name    Timer configuration
@@ -70,12 +90,13 @@ static const uart_conf_t uart_config[] = {
 /** @} */
 
 
-#if 0
 /**
  * @name   PWM configuration
  * @{
  */
 static const pwm_conf_t pwm_config[] = {
+#ifdef TODO
+#error To be implemented
     {
         .dev      = TIM2,
         .rcc_mask = RCC_APB1ENR_TIM2EN,
@@ -96,11 +117,11 @@ static const pwm_conf_t pwm_config[] = {
         .af       = GPIO_AF2,
         .bus      = APB1
     }
+#endif
 };
 
 #define PWM_NUMOF           ARRAY_SIZE(pwm_config)
 /** @} */
-#endif
 
 
 /**
@@ -109,11 +130,12 @@ static const pwm_conf_t pwm_config[] = {
  */
 static const spi_conf_t spi_config[] = {
     {
+    	// SPI bus dedicated to SX1272/SX1261
         .dev      = SPI1,
-        .mosi_pin = GPIO_PIN(PORT_A, 7),
-        .miso_pin = GPIO_PIN(PORT_A, 6),
-        .sclk_pin = GPIO_PIN(PORT_A, 5),
-        .cs_pin   = GPIO_PIN(PORT_B, 0), //pin non mappée sur une af donc à controller avec GPIOB->ODR
+        .mosi_pin = GPIO_PIN(PORT_A,7),
+        .miso_pin = GPIO_PIN(PORT_A,6),
+        .sclk_pin = GPIO_PIN(PORT_A,5),
+        .cs_pin   = GPIO_PIN(PORT_B,0),
         .mosi_af  = GPIO_AF5,
         .miso_af  = GPIO_AF5,
         .sclk_af  = GPIO_AF5,
@@ -121,6 +143,7 @@ static const spi_conf_t spi_config[] = {
         .apbbus   = APB2
     },
     {
+    	// SPI bus for one external sensors (CN5 connector)
         .dev      = SPI2,
         .mosi_pin = GPIO_PIN(PORT_B, 15),
         .miso_pin = GPIO_PIN(PORT_B, 14),
@@ -138,12 +161,13 @@ static const spi_conf_t spi_config[] = {
 #define SPI_NUMOF           ARRAY_SIZE(spi_config)
 /** @} */
 
-#if 0
 /**
  * @name I2C configuration
   * @{
  */
 static const i2c_conf_t i2c_config[] = {
+#ifdef TODO
+#error To be implemented
     {
         .dev            = I2C1,
         .speed          = I2C_SPEED_NORMAL,
@@ -168,14 +192,17 @@ static const i2c_conf_t i2c_config[] = {
         .clk            = CLOCK_APB1,
         .irqn           = I2C2_EV_IRQn
     }
+#endif
 };
 
+#ifdef TODO
+#error To be implemented
 #define I2C_0_ISR           isr_i2c1_ev
 #define I2C_1_ISR           isr_i2c2_ev
+#endif
 
 #define I2C_NUMOF           ARRAY_SIZE(i2c_config)
 /** @} */
-#endif
 
 
 /**

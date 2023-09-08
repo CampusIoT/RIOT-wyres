@@ -14,6 +14,7 @@
  * @brief       Board specific definitions for the Wyres Base board.
  *
  * @author      Tristan Lailler <tristan.lailler@etu.univ-grenoble-alpes.fr
+ * @author      Didier Donsez <didier.donsez@univ-grenoble-alpes.fr
  */
 
 #ifndef GPIO_PARAMS_H
@@ -47,8 +48,8 @@ static const  saul_gpio_params_t saul_gpio_params[] =
         .mode = GPIO_OUT
     },
     {
-        .name = "BTN0",
-        .pin  = BTN0_PIN,
+        .name = "BTN1",
+        .pin  = BTN1_PIN,
         .mode = GPIO_IN_PU
     },
 };
