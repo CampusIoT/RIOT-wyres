@@ -37,28 +37,30 @@ extern "C" {
  * @name Macros for controlling the on-board LEDs.
  * @{
  */
-#define LED_RED_PIN            GPIO_PIN(PORT_A, 15)
-#define LED_RED_PORT           GPIOA
-#define LED_RED_MASK           (1 << 15)
+#define LED0_PIN            	GPIO_PIN(PORT_A,15)
+#define LED_RED_PIN            	GPIO_PIN(PORT_A,15)
+#define LED_RED_PORT           	GPIOA
+#define LED_RED_MASK           	(1 << 15)
 
-#define LED_RED_ON             (LED_RED_PORT->BSRR |= LED_RED_MASK)
-#define LED_RED_OFF            (LED_RED_PORT->BSRR |= LED_RED_MASK<<16)
-#define LED_RED_TOGGLE         (LED_RED_PORT->ODR  ^= LED_RED_MASK)
+#define LED_RED_ON             	(LED_RED_PORT->BSRR |= LED_RED_MASK)
+#define LED_RED_OFF            	(LED_RED_PORT->BSRR |= LED_RED_MASK<<16)
+#define LED_RED_TOGGLE         	(LED_RED_PORT->ODR  ^= LED_RED_MASK)
 
-#define LED_GREEN_PIN            GPIO_PIN(PORT_A, 0)
-#define LED_GREEN_PORT           GPIOA
-#define LED_GREEN_MASK           (1)
+#define LED1_PIN            	GPIO_PIN(PORT_A,0)
+#define LED_GREEN_PIN           GPIO_PIN(PORT_A,0)
+#define LED_GREEN_PORT          GPIOA
+#define LED_GREEN_MASK          (1)
 
-#define LED_GREEN_ON             (LED_GREEN_PORT->BSRR |= LED_GREEN_MASK)
-#define LED_GREEN_OFF            (LED_GREEN_PORT->BSRR |= LED_GREEN_MASK<<16)
-#define LED_GREEN_TOGGLE         (LED_GREEN_PORT->ODR  ^= LED_GREEN_MASK)
+#define LED_GREEN_ON            (LED_GREEN_PORT->BSRR |= LED_GREEN_MASK)
+#define LED_GREEN_OFF           (LED_GREEN_PORT->BSRR |= LED_GREEN_MASK<<16)
+#define LED_GREEN_TOGGLE        (LED_GREEN_PORT->ODR  ^= LED_GREEN_MASK)
 /** @} */
 
 /**
  * @name Light sensor supply
  * @{
  */
-#define LIGHT_SENSOR_SUPPLY_PIN            GPIO_PIN(PORT_B, 6)
+#define LIGHT_SENSOR_SUPPLY_PIN            GPIO_PIN(PORT_B,6)
 #define LIGHT_SENSOR_SUPPLY_PORT           GPIOB
 #define LIGHT_SENSOR_SUPPLY_MASK           (1 << 6)
 
@@ -84,9 +86,9 @@ extern "C" {
  * @name Button
  * @{
  */
-#define BUTTON_PIN            				GPIO_PIN(PORT_B,3)
-#define BUTTON_PORT           				GPIOB
-#define BUTTON_MASK           				(1 << 3)
+#define BTN0_PIN            				GPIO_PIN(PORT_B,3)
+#define BTN0_PORT           				GPIOB
+#define BTN0_MASK           				(1 << 3)
 
 /** @} */
 
