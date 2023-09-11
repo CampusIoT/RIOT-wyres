@@ -8,7 +8,7 @@ On-board
 * [ ] tests/periph/pwm (pin PA1 on Speaker PA14/TP5 pad) - application : play sound/alarm
 * [ ] tests/drivers/lpsxxx - application : altimeter
 * [ ] tests/drivers/[lis2dh12](https://www.st.com/en/mems-and-sensors/lis2dh12.html) - application :  motion sensor for door opening, bird nest activity, inclinometer (windsocks, railway barrier on Level crossing, bike theft)... 
-* [ ] [SPH0641LM4H-1](https://www.knowles.com/docs/default-source/default-document-library/sph0641lm4h-1_morello_datasheet.pdf) MEMS microphone on I2S bus - application : sound dB level
+* [ ] [SPH0641LM4H-1](https://www.knowles.com/docs/default-source/default-document-library/sph0641lm4h-1_morello_datasheet.pdf) MEMS microphone on I2S bus - application : sound/noise dB level, shootgun timestamping ...
 
 Groove I2C connector (CN2)
 * [ ] tests/drivers/bmx280
@@ -32,8 +32,8 @@ Button Pad
 
 GPIO Pad
 * [ ] Rain gauge (PA8 on TP3 pad) - application : microclimat station
-* [ ] PT1000 temperature probe (-85°C fridge) - application : fridge monitor (UFR Pharmacie @ Bat Jean Roger)
-* [ ] One Wire DS18B20 temperature probe (-55°C fridge) - application : fridge monitor (UFR Pharmacie @ Bat Jean Roger)
+* [ ] PT1000 temperature probe (-200°C to -85°C) - application : fridge monitor (UFR Pharmacie @ Bat Jean Roger)
+* [ ] One Wire DS18B20 temperature probe (-55°C) - application : fridge monitor (UFR Pharmacie @ Bat Jean Roger), Permafrost (@ Aiguille du Midi)
 
 Low-power mode
 * [ ] [X-NUCLEO-LPM01A Power Shield](https://github.com/CampusIoT/tutorial/tree/master/x-nucleo-lpm01a)
