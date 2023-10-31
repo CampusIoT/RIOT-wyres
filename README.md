@@ -15,7 +15,7 @@ This repository contains the firmware implementation with [RIOT OS](https://gith
 ```bash
 cd ~/github/RIOT-OS/RIOT
 cd examples/hello-world
-EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=wyres_base
+EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=wyres-base
 ```
 
 ## Requirements
