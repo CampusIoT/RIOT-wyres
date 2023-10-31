@@ -43,7 +43,9 @@
 #include "fmt.h"
 
 #define SX127X_LORA_MSG_QUEUE   (16U)
+#ifndef SX127X_STACKSIZE
 #define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
+#endif
 
 #define MSG_TYPE_ISR            (0x3456)
 
@@ -453,21 +455,7 @@ int payload_cmd(int argc, char **argv)
     return 0;
 }
 
-static const shell_command_t shell_commands[] = {
-    { "setup",    "Initialize LoRa modulation settings",     lora_setup_cmd },
-    { "implicit", "Enable implicit header",                  implicit_cmd },
-    { "crc",      "Enable CRC",                              crc_cmd },
-    { "payload",  "Set payload length (implicit header)",    payload_cmd },
-    { "random",   "Get random number from sx127x",           random_cmd },
-    { "syncword", "Get/Set the syncword",                    syncword_cmd },
-    { "rx_timeout", "Set the RX timeout",                    rx_timeout_cmd },
-    { "channel",  "Get/Set channel frequency (in Hz)",       channel_cmd },
-    { "register", "Get/Set value(s) of registers of sx127x", register_cmd },
-    { "send",     "Send raw payload string",                 send_cmd },
-    { "listen",   "Start raw payload listener",              listen_cmd },
-    { "reset",    "Reset the sx127x device",                 reset_cmd },
-    { NULL, NULL, NULL }
-};
+
 
 static void _event_cb(netdev_t *dev, netdev_event_t event)
 {
@@ -539,28 +527,62 @@ void *_recv_thread(void *arg)
     }
 }
 
-int main(void)
+
+int init_sx1272_cmd(int argc, char **argv)
 {
-    sx127x.params = sx127x_params[0];
-    netdev_t *netdev = &sx127x.netdev;
+    (void)argc;
+    (void)argv;
+	    sx127x.params = sx127x_params[0];
+	    netdev_t *netdev = &sx127x.netdev;
 
-    netdev->driver = &sx127x_driver;
+	    netdev->driver = &sx127x_driver;
 
-    if (netdev->driver->init(netdev) < 0) {
-        puts("Failed to initialize SX127x device, exiting");
-        return 1;
-    }
+        puts("1");
+        printf("%8x\n", (unsigned int)netdev->driver);
+        printf("%8x\n", (unsigned int)netdev->driver->init);
 
-    netdev->event_callback = _event_cb;
+	    if (netdev->driver->init(netdev) < 0) {
+	        puts("Failed to initialize SX127x device, exiting");
+	        return 1;
+	    }
+        puts("2");
 
-    _recv_pid = thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN - 1,
-                              THREAD_CREATE_STACKTEST, _recv_thread, NULL,
-                              "recv_thread");
+	    netdev->event_callback = _event_cb;
+        puts("3");
 
-    if (_recv_pid <= KERNEL_PID_UNDEF) {
-        puts("Creation of receiver thread failed");
-        return 1;
-    }
+	    _recv_pid = thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN - 1,
+	                              THREAD_CREATE_STACKTEST, _recv_thread, NULL,
+	                              "recv_thread");
+        puts("4");
+
+	    if (_recv_pid <= KERNEL_PID_UNDEF) {
+	        puts("Creation of receiver thread failed");
+	        return 1;
+	    }
+        puts("5");
+
+        return 0;
+}
+
+
+static const shell_command_t shell_commands[] = {
+	{ "init",    "Initialize SX1272",     					init_sx1272_cmd },
+	{ "setup",    "Initialize LoRa modulation settings",     lora_setup_cmd },
+    { "implicit", "Enable implicit header",                  implicit_cmd },
+    { "crc",      "Enable CRC",                              crc_cmd },
+    { "payload",  "Set payload length (implicit header)",    payload_cmd },
+    { "random",   "Get random number from sx127x",           random_cmd },
+    { "syncword", "Get/Set the syncword",                    syncword_cmd },
+    { "rx_timeout", "Set the RX timeout",                    rx_timeout_cmd },
+    { "channel",  "Get/Set channel frequency (in Hz)",       channel_cmd },
+    { "register", "Get/Set value(s) of registers of sx127x", register_cmd },
+    { "send",     "Send raw payload string",                 send_cmd },
+    { "listen",   "Start raw payload listener",              listen_cmd },
+    { "reset",    "Reset the sx127x device",                 reset_cmd },
+    { NULL, NULL, NULL }
+};
+
+int main(void) {
 
     /* start the shell */
     puts("Initialization successful - starting the shell now");

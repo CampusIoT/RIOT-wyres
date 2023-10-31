@@ -17,8 +17,12 @@ USEMODULE += shell_cmds_default
 USEMODULE += fmt
 
 DRIVER ?= sx1272
-
 # use SX1276 by default
 USEMODULE += $(DRIVER)
+
+
+CFLAGS += -DISR_STACKSIZE=1024U
+#CFLAGS += -DSX127X_STACKSIZE=1024U
+
 
 include $(RIOTBASE)/Makefile.include
