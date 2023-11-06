@@ -25,3 +25,4 @@ EXTERNAL_BOARD_DIRS=~/github/campusiot/RIOT-wyres/boards make BOARD=wyres-base
 
 ## Buy
 * [Wyld Things @ Tindie](https://www.tindie.com/stores/wyld-things/)
+* [Parafix Porex membrane disc PMV30I](https://parafix.com/product/porex-pmv30i/)
