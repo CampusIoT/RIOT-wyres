@@ -584,6 +584,8 @@ static const shell_command_t shell_commands[] = {
 
 int main(void) {
 
+    //init_sx1272_cmd(0,NULL);
+
     /* start the shell */
     puts("Initialization successful - starting the shell now");
     char line_buf[SHELL_DEFAULT_BUFSIZE];
@@ -592,3 +594,4 @@ int main(void) {
 
     return 0;
 }
+
