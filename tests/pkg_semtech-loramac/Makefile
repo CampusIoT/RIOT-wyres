@@ -2,7 +2,7 @@
 APPLICATION = test-pkg-semtech-loramac
 
 # This has to be the absolute path to the RIOT base directory:
-RIOTBASE ?= ../../../../RIOT-OS/RIOT
+#RIOTBASE ?= ../../../../RIOT-OS/RIOT
 
 # Path to my boards
 EXTERNAL_BOARD_DIRS ?= ../../boards
@@ -17,6 +17,10 @@ DEVELHELP ?= 1
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
 
+# Fix the problem of the size of the debugging files
+CFLAGS_DBG = 
+
+
 include $(RIOTBASE)/tests/Makefile.tests_common
 BOARD_WITHOUT_LORAMAC_RX := \
     arduino-mega2560 \
@@ -24,11 +28,11 @@ BOARD_WITHOUT_LORAMAC_RX := \
     stm32f0discovery \
     waspmote-pro \
 
-#LORA_DRIVER ?= sx1272
-#LORA_REGION ?= EU868
+LORA_DRIVER ?= sx1272
+LORA_REGION ?= EU868
 
 USEPKG += semtech-loramac
-#USEMODULE += $(LORA_DRIVER)
+USEMODULE += $(LORA_DRIVER)
 
 # load loramac RX if board supports it
 ifeq (,$(filter $(BOARD),$(BOARD_WITHOUT_LORAMAC_RX)))
