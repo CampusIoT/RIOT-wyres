@@ -1,1 +1,0 @@
-RIOT Wyres :: Applications
