@@ -30,9 +30,25 @@
 extern semtech_loramac_t loramac;
 
 #ifdef MODULE_SEMTECH_LORAMAC_RX
+
+#define FPORT_REBOOT            (30U)
+#define FPORT_SONG              (33U)
+
+static void _reboot(const uint32_t delay) {
+    printf("Rebooting in %ld sec\n", delay);
+    // TODO
+}
+
+static void _play_song(const char* song) {
+    printf("Playing song: %s\n", song);
+    // TODO
+
+}
+
 #define LORAMAC_RECV_MSG_QUEUE                   (4U)
 static msg_t _loramac_recv_queue[LORAMAC_RECV_MSG_QUEUE];
 static char _recv_stack[THREAD_STACKSIZE_DEFAULT];
+
 
 static void *_wait_recv(void *arg)
 {
@@ -44,10 +60,25 @@ static void *_wait_recv(void *arg)
         switch (semtech_loramac_recv(&loramac)) {
             case SEMTECH_LORAMAC_RX_DATA:
                 loramac.rx_data.payload[loramac.rx_data.payload_len] = 0;
+                const uint8_t fport = loramac.rx_data.port;
                 printf("Data received: %s, port: %d\n",
-                (char *)loramac.rx_data.payload, loramac.rx_data.port);
-                break;
+                (char *)loramac.rx_data.payload, fport);
 
+                switch(fport) {
+                 case FPORT_REBOOT: {
+                    uint32_t delay = (uint8_t)(loramac.rx_data.payload[0] & 0xFF);
+                    _reboot(delay);
+                    break;
+                }
+               case FPORT_SONG: {
+                    _play_song((char *)loramac.rx_data.payload);
+                    break;
+                }
+                default: {
+                    break;
+                }
+                }
+                break;
             case SEMTECH_LORAMAC_RX_LINK_CHECK:
                 printf("Link check information:\n"
                    "  - Demodulation margin: %d\n"
