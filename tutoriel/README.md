@@ -1,10 +1,14 @@
-# Tutoriel sur RIOT et LoRa/LoRaWAN avec la carte Wyres Base
+# Tutoriel sur RIOT OS et LoRa/LoRaWAN avec la carte Wyres Base
 
 Auteur(s): Didier DONSEZ
 
 ## Objectifs pédagogiques
 
-L'objectif de ce tutoriel est de prendre en main la carte Wyres Base avec e système
+L'objectif de ce tutoriel est
+* de prendre en main la carte Wyres Base avec le système d'exploitation RIOT OS,
+* d'effectuer des mesures avec les capteurs de la carte et des capteurs additionnels,
+* de transmettre des mesures de capteurs via LoRa et LoRaWAN,
+* de collecter, stocker et archiver les mesures des capteurs,
 
 ## Chapitres
 
