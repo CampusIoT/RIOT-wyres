@@ -5,8 +5,8 @@ loramac set appeui 0000000000000000
 loramac set appkey 00112233445566778899AABBCCDDEEFF
 loramac save
 
-loramac adr on
-loramac dr 5
+loramac set adr on
+loramac set dr 5
 
 loramac join otaa
 loramac link_check
