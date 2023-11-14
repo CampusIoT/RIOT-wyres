@@ -2,7 +2,7 @@
 APPLICATION = test-pkg-semtech-loramac
 
 # This has to be the absolute path to the RIOT base directory:
-#RIOTBASE ?= ../../../../RIOT-OS/RIOT
+RIOTBASE ?= ${HOME}/github/RIOT-OS/RIOT
 
 # Path to my boards
 EXTERNAL_BOARD_DIRS ?= ../../boards
