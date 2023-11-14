@@ -75,6 +75,91 @@ static void *_wait_recv(void *arg)
 /* loramac shell command handler is implemented in
    sys/shell/commands/sc_loramac.c */
 
+uint8_t fpayload[255];
+
+static size_t convert_hex(uint8_t *dest, const char *src) {
+    size_t i;
+    int value;
+    size_t count = strlen(src);
+    for (i = 0; i < count && sscanf(src + i * 2, "%2x", &value) == 1; i++) {
+        dest[i] = value;
+    }
+    return i;
+}
+
+static void _loramac_txhex_usage(void)
+{
+    puts("Usage: loramac_txhex <hexpayload> [<cnf|uncnf>] [port]");
+}
+
+static int _loramac_txhex_handler(int argc, char **argv)
+{
+    if (argc < 2) {
+        _loramac_txhex_usage();
+        return 1;
+    }
+    uint8_t cnf = CONFIG_LORAMAC_DEFAULT_TX_MODE;  /* Default: confirmable */
+    uint8_t port = CONFIG_LORAMAC_DEFAULT_TX_PORT; /* Default: 2 */
+    /* handle optional parameters */
+    if (argc > 2) {
+        if (strcmp(argv[2], "cnf") == 0) {
+            cnf = LORAMAC_TX_CNF;
+        }
+        else if (strcmp(argv[2], "uncnf") == 0) {
+            cnf = LORAMAC_TX_UNCNF;
+        }
+        else {
+            _loramac_txhex_usage();
+            return 1;
+        }
+
+        if (argc > 3) {
+            port = atoi(argv[3]);
+            if (port == 0 || port >= 224) {
+                printf("error: invalid port given '%d', "
+                        "port can only be between 1 and 223\n", port);
+                return 1;
+            }
+        }
+    }
+
+    semtech_loramac_set_tx_mode(&loramac, cnf);
+    semtech_loramac_set_tx_port(&loramac, port);
+
+
+    // convert hexstring to uint8_t*
+    const size_t len = convert_hex(fpayload, argv[1]);
+    switch (semtech_loramac_send(&loramac,  fpayload, len)) {
+
+        case SEMTECH_LORAMAC_NOT_JOINED:
+            puts("Cannot send: not joined");
+            return 1;
+
+        case SEMTECH_LORAMAC_DUTYCYCLE_RESTRICTED:
+            puts("Cannot send: dutycycle restriction");
+            return 1;
+
+        case SEMTECH_LORAMAC_BUSY:
+            puts("Cannot send: MAC is busy");
+            return 1;
+
+        case SEMTECH_LORAMAC_TX_ERROR:
+            puts("Cannot send: error");
+            return 1;
+
+        case SEMTECH_LORAMAC_TX_CNF_FAILED:
+            puts("Fail to send: no ACK received");
+            return 1;
+    }
+
+    puts("Message sent with success");
+    return 0;
+}
+
+
+SHELL_COMMAND(loramac_txhex, "Send hextring message", _loramac_txhex_handler);
+
+
 int main(void)
 {
 #ifdef MODULE_SEMTECH_LORAMAC_RX
