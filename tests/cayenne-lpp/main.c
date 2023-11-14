@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Inria
+ * Copyright (C) 2023 Université Grenoble Alpes
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -52,6 +52,9 @@ static void cassiniOval(double time, double a, double b, double *x, double *y)
 
 int main(void)
 {
+
+    puts("High altitude balloon track simulator");
+
     double init_latitude = 45.5;
     double init_longitude = 5.5;
     double init_altitude = 10000;  // meter
@@ -78,6 +81,7 @@ int main(void)
         double luninosity = init_luninosity + 500 * cos(step);
         double battery_voltage = init_battery_voltage - step; // mV
 
+        cayenne_lpp_reset(&lpp);
         cayenne_lpp_add_temperature(&lpp, 1, temperature);
         cayenne_lpp_add_relative_humidity(&lpp, 2, humidity);
         cayenne_lpp_add_barometric_pressure(&lpp, 3, pressure);
@@ -85,13 +89,14 @@ int main(void)
         cayenne_lpp_add_gps(&lpp, 5, latitude, longitude, altitude);
         cayenne_lpp_add_analog_input(&lpp, 6, battery_voltage);
 
+        printf("\n==== Point #%d ====\n",t);
 
-        printf("temperature=%.2f\n",temperature);
-        printf("humidity=%.1f\n",humidity);
-        printf("pressure=%.0f\n",pressure);
-        printf("luninosity=%.1f\n",luninosity);
-        printf("latitude=%.5f longitude=%.5f altitude=%.0f\n",latitude, longitude, altitude);
-        printf("battery_voltage=%.1f\n",battery_voltage);
+        printf(" temperature:     %.2f °C\n",temperature);
+        printf(" humidity:        %.1f RH\n",humidity);
+        printf(" pressure:        %.0f hPa\n",pressure);
+        printf(" luninosity:      %.1f lux\n",luninosity);
+        printf(" position:        lat=%.5f° lon=%.5f° alt=%.0fm\n",latitude, longitude, altitude);
+        printf(" battery_voltage: %.1f mV\n",battery_voltage);
 
         _print_buffer(lpp.buffer, lpp.cursor, "LPP: ");
 
