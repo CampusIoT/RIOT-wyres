@@ -3,6 +3,7 @@ APPLICATION = test-shell
 
 # This has to be the absolute path to the RIOT base directory:
 #RIOTBASE ?= ../../../../RIOT-OS/RIOT
+RIOTBASE ?= ${HOME}/github/RIOT-OS/RIOT
 
 # Path to my boards
 EXTERNAL_BOARD_DIRS ?= ../../boards
@@ -20,6 +21,14 @@ QUIET ?= 1
 USEMODULE += app_metadata
 USEMODULE += shell_cmds_default
 USEMODULE += ps
+
+FEATURES_REQUIRED += periph_rtc
+FEATURES_OPTIONAL += periph_rtc_ms
+FEATURES_OPTIONAL += periph_rtc_mem
+
+DISABLE_MODULE += periph_init_rtc
+
+
 
 # Use a terminal that does not introduce extra characters into the stream.
 RIOT_TERMINAL ?= socat
