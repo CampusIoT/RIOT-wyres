@@ -22,7 +22,8 @@ L'objectif de ce tutoriel est
 * [Collecte, stockage et affichage des mesures de capteurs LoRaWAN](08.md)
 * [Langages de programmation de haut niveau](09.md)
 * [Cryptographie](10.md)
-* [La programmation ultra basse comsommation](11.md)
+* [Intelligence artificielle embarquée (TinyML)](11.md)
+* [La programmation ultra basse comsommation](12.md)
 * [Contributions](20.md)
 
 ## Liens utiles
