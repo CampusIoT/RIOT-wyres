@@ -109,24 +109,23 @@ static const uart_conf_t uart_config[] = {
 #define UART_NUMOF          ARRAY_SIZE(uart_config)
 /** @} */
 
-#if 0
 /**
  * @name   PWM configuration
  * @{
  */
 static const pwm_conf_t pwm_config[] = {
-#ifdef TODO
-#error To be implemented
     {
         .dev      = TIM2,
         .rcc_mask = RCC_APB1ENR_TIM2EN,
-        .chan     = { { .pin = GPIO_PIN(PORT_B, 3) /* D3 */,  .cc_chan = 1 },
-                      { .pin = GPIO_PIN(PORT_B, 10) /* D6 */, .cc_chan = 2 },
+        .chan     = { { .pin = GPIO_PIN(PORT_A, 1) ,           .cc_chan = 1 },
+                      { .pin = GPIO_UNDEF,                    .cc_chan = 0 },
                       { .pin = GPIO_UNDEF,                    .cc_chan = 0 },
                       { .pin = GPIO_UNDEF,                    .cc_chan = 0 } },
         .af       = GPIO_AF1,
         .bus      = APB1
-    },
+    }
+#if 0    
+    ,
     {
         .dev      = TIM3,
         .rcc_mask = RCC_APB1ENR_TIM3EN,
@@ -142,7 +141,6 @@ static const pwm_conf_t pwm_config[] = {
 
 #define PWM_NUMOF           ARRAY_SIZE(pwm_config)
 /** @} */
-#endif
 
 /**
  * @name    SPI configuration
