@@ -1,0 +1,1229 @@
+[
+    {
+        "id": "176e4c9f.1fe43b",
+        "type": "tab",
+        "label": "Collect Devices",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b23a6a86.69b218",
+        "type": "tab",
+        "label": "Payloard Codec",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8ef8462d.3e5728",
+        "type": "tab",
+        "label": "Save Data",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8c90c3c0.3ed818",
+        "type": "tab",
+        "label": "Status Error",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "e038e18.c53e52",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false
+    },
+    {
+        "id": "70b21447.a18194",
+        "type": "influxdb",
+        "hostname": "influxdb",
+        "port": "8086",
+        "protocol": "http",
+        "database": "lorawan",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x"
+    },
+    {
+        "id": "475864c9.5c678c",
+        "type": "mqtt-broker",
+        "name": "LNS",
+        "broker": "lns.campusiot.imag.fr",
+        "port": "8883",
+        "tls": "e038e18.c53e52",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": 4,
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "cbebb845.774e68",
+        "type": "json",
+        "z": "176e4c9f.1fe43b",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 490,
+        "y": 240,
+        "wires": [
+            [
+                "9925749c.2b32c",
+                "f8db9a84.e4b37"
+            ]
+        ]
+    },
+    {
+        "id": "5a91beaa.681d28",
+        "type": "link out",
+        "z": "176e4c9f.1fe43b",
+        "name": "application",
+        "links": [
+            "27a7d2a5.b405a6",
+            "590961be.974788",
+            "69db27cf.f9d1d8"
+        ],
+        "x": 1235,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "a9ef9d47.882218",
+        "type": "debug",
+        "z": "176e4c9f.1fe43b",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1230,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "9be17ce9.a1dbc8",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "add radio",
+        "func": "\n\nfunction getSubBandsEU868(frequency) {\n    if(frequency>=863000000 && frequency<868000000) {\n        return \"g\";\n    } else if(frequency>=868000000 && frequency<868600000) {\n        return \"g1\";\n    } else if(frequency>=868700000 && frequency<869200000) {\n        return \"g2\";\n    } else if(frequency>=869400000 && frequency<869650000) {\n        return \"g3\";\n    } else if(frequency>=869700000 && frequency<870000000) {\n        return \"g4\";\n    } else {\n        return undefined;\n    }\n    /* Duty Cycle */\n    /*\n    g (863.0 – 868.0 MHz): 1%\n    g1 (868.0 – 868.6 MHz): 1%\n    g2 (868.7 – 869.2 MHz): 0.1%\n    g3 (869.4 – 869.65 MHz): 10%\n    g4 (869.7 – 870.0 MHz): 1%\n    */\n}\n\nvar p = msg.payload;\n\nvar rxInfo = p.rxInfo;\n\nvar ri = undefined;\n\nrxInfo.forEach(function(e) {\n  if(ri === undefined) {\n      ri = e;\n  } else if(e.rssi > ri.rssi) {\n      ri = e;\n  }\n});\n\nri.date = Date.now();\nri.dr = p.txInfo.dr;\nri.frequency = p.txInfo.frequency;\nri.subband = getSubBandsEU868(p.txInfo.frequency);\n// Can not compute timeonair without the frame length\n//ri.toa = TimeOnAir.getLoRaWANTimeOnAir(size, 0, ri.dr)\n\n\nri.redundancy = rxInfo.length;\n\nmsg.payload.radio = ri;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 960,
+        "y": 240,
+        "wires": [
+            [
+                "6b3b2577.b925bc"
+            ]
+        ]
+    },
+    {
+        "id": "9925749c.2b32c",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "convert frame payload",
+        "func": "if(msg.payload.data){\n    msg.payload.frmPayload = Buffer.from(msg.payload.data, 'base64');\n    msg.payload.size = msg.payload.frmPayload.length;\n} else {\n    msg.payload.size = 0;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 745,
+        "y": 240,
+        "wires": [
+            [
+                "9be17ce9.a1dbc8"
+            ]
+        ]
+    },
+    {
+        "id": "6b3b2577.b925bc",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "add now",
+        "func": "\nmsg.payload.time = new Date().getTime();\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1120,
+        "y": 240,
+        "wires": [
+            [
+                "a9ef9d47.882218",
+                "5a91beaa.681d28"
+            ]
+        ]
+    },
+    {
+        "id": "15177116.48c4af",
+        "type": "link in",
+        "z": "176e4c9f.1fe43b",
+        "name": "input4test",
+        "links": [
+            "ea3437b7.7160e",
+            "2eb27a83.96f21e"
+        ],
+        "x": 515,
+        "y": 100,
+        "wires": [
+            [
+                "9925749c.2b32c"
+            ]
+        ]
+    },
+    {
+        "id": "f8db9a84.e4b37",
+        "type": "debug",
+        "z": "176e4c9f.1fe43b",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 730,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "bd9c77c369b146ca",
+        "type": "mqtt in",
+        "z": "176e4c9f.1fe43b",
+        "name": "Application Rx Wyres Yaoudé",
+        "topic": "application/311/device/+/rx",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "475864c9.5c678c",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 200,
+        "y": 240,
+        "wires": [
+            [
+                "cbebb845.774e68"
+            ]
+        ]
+    },
+    {
+        "id": "17add1d89fdcfd42",
+        "type": "mqtt in",
+        "z": "176e4c9f.1fe43b",
+        "name": "Application Rx FTD 20cac",
+        "topic": "application/12/device/0018b20000020cac/rx",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "475864c9.5c678c",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 190,
+        "y": 340,
+        "wires": [
+            [
+                "cbebb845.774e68"
+            ]
+        ]
+    },
+    {
+        "id": "27a7d2a5.b405a6",
+        "type": "link in",
+        "z": "b23a6a86.69b218",
+        "name": "",
+        "links": [
+            "16cc577e.d91489",
+            "5a91beaa.681d28"
+        ],
+        "x": 195,
+        "y": 220,
+        "wires": [
+            [
+                "70a5a5f2.183e34",
+                "cf4442ba.bf396",
+                "9613b1c.90b5ed"
+            ]
+        ]
+    },
+    {
+        "id": "70a5a5f2.183e34",
+        "type": "function",
+        "z": "b23a6a86.69b218",
+        "name": "Filter decoded then convert data",
+        "func": "if(msg.payload.object) {\n    return undefined;\n} else {\n    if(msg.payload.data){\n        msg.payload.data = Buffer.from(msg.payload.data, 'base64');\n        return msg;\n    } else {\n        return msg;\n    }\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 480,
+        "y": 220,
+        "wires": [
+            [
+                "b7a128b1.2adae"
+            ]
+        ]
+    },
+    {
+        "id": "975ef738.66ae08",
+        "type": "link out",
+        "z": "b23a6a86.69b218",
+        "name": "geoloc_device",
+        "links": [
+            "590961be.974788"
+        ],
+        "x": 995,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "b7a128b1.2adae",
+        "type": "function",
+        "z": "b23a6a86.69b218",
+        "name": "filter message with position",
+        "func": "var p = msg.payload;\nvar o = p.object;\nif(o){\n    if(o.latitude && o.longitude) {\n        return msg;\n    } else if(o.lat && o.lng) {\n        return msg;\n    }\n}\nreturn undefined;    \n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 720,
+        "y": 80,
+        "wires": [
+            [
+                "975ef738.66ae08"
+            ]
+        ]
+    },
+    {
+        "id": "cf4442ba.bf396",
+        "type": "debug",
+        "z": "b23a6a86.69b218",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 390,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "9613b1c.90b5ed",
+        "type": "function",
+        "z": "b23a6a86.69b218",
+        "name": "Filter undecoded",
+        "func": "if(msg.payload.object) {\n    return msg;\n} else {\n    return null;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 429,
+        "y": 180,
+        "wires": [
+            [
+                "b7a128b1.2adae",
+                "a029da63.bd63a"
+            ]
+        ]
+    },
+    {
+        "id": "97bd28ab.859f88",
+        "type": "link out",
+        "z": "b23a6a86.69b218",
+        "name": "undecoded",
+        "links": [
+            "833669c2.795cb8"
+        ],
+        "x": 975,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "a029da63.bd63a",
+        "type": "function",
+        "z": "b23a6a86.69b218",
+        "name": "Flatten LPP",
+        "func": "var p = msg.payload;\n\nfunction FlattenLPP(json) {\n    var o = {};\n    for (const p in json) {\n        var value = json[p];\n        if(typeof(value) === 'number') {\n            o[p] = value;\n        } else if(typeof(value) === 'object'){\n            for (const p2 in value) {\n                var value2 = value[p2];\n                if(typeof(value2) === 'number') {\n                    o[p + p2] = value2;\n                }\n            }\n        }\n    }\n    return o    \n}\n\nvar json = msg.payload.object;\n\nif(json) {\n    var o = FlattenLPP(json);\n    if(o) {\n        msg.payload.object = o;\n        return msg;\n    }\n}\n\nreturn undefined;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 770,
+        "y": 180,
+        "wires": [
+            [
+                "97bd28ab.859f88"
+            ]
+        ]
+    },
+    {
+        "id": "c394074f.57539",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 910,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "df40f84.4bd5288",
+        "type": "inject",
+        "z": "8ef8462d.3e5728",
+        "name": "DROP all",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 364,
+        "wires": [
+            [
+                "b55d68bc.514e7",
+                "de6ceda5.ce4768",
+                "e75b1a57.d9b12",
+                "36809190.0fa4a6",
+                "19af70ce.736257",
+                "d5d3b1cc.758b08"
+            ]
+        ]
+    },
+    {
+        "id": "81b74405.f01f58",
+        "type": "comment",
+        "z": "8ef8462d.3e5728",
+        "name": "Reset series by clicking on the node",
+        "info": "",
+        "x": 240,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "b55d68bc.514e7",
+        "type": "influxdb in",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "DROP radio",
+        "query": "DROP MEASUREMENT radio",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 510,
+        "y": 280,
+        "wires": [
+            [
+                "c394074f.57539"
+            ]
+        ]
+    },
+    {
+        "id": "de6ceda5.ce4768",
+        "type": "influxdb in",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "DROP data",
+        "query": "DROP MEASUREMENT data",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 510,
+        "y": 324,
+        "wires": [
+            [
+                "c394074f.57539"
+            ]
+        ]
+    },
+    {
+        "id": "e75b1a57.d9b12",
+        "type": "influxdb in",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "DROP rx",
+        "query": "DROP MEASUREMENT rx",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 500,
+        "y": 364,
+        "wires": [
+            [
+                "c394074f.57539"
+            ]
+        ]
+    },
+    {
+        "id": "523e40e9.b6ef48",
+        "type": "influxdb out",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "radio",
+        "measurement": "radio",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 690,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "af88da4d.7c7cd",
+        "type": "influxdb out",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "rawdata",
+        "measurement": "application",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 700,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "2a85e3e5.706ea4",
+        "type": "influxdb out",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "rx",
+        "measurement": "rx",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 690,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "5e7f86a1.457188",
+        "type": "link in",
+        "z": "8ef8462d.3e5728",
+        "name": "gatewayrx2point",
+        "links": [
+            "46436c8c.a31834",
+            "24df3277.6cb4ee"
+        ],
+        "x": 175,
+        "y": 680,
+        "wires": [
+            [
+                "5f8ee0a3.885e28"
+            ]
+        ]
+    },
+    {
+        "id": "833669c2.795cb8",
+        "type": "link in",
+        "z": "8ef8462d.3e5728",
+        "name": "object2point",
+        "links": [
+            "7a55726d.c3aeac",
+            "9a08d558.62e1f",
+            "c141f835.7a33d8",
+            "c5bc3503.79869",
+            "8ae1cee1.8a65e8",
+            "dc4b7855.5f747",
+            "97bd28ab.859f88"
+        ],
+        "x": 175,
+        "y": 820,
+        "wires": [
+            [
+                "d3f5d430.bbe4b"
+            ]
+        ]
+    },
+    {
+        "id": "4d054fa6.b2656",
+        "type": "file",
+        "z": "8ef8462d.3e5728",
+        "name": "Append in a local logfile.txt",
+        "filename": "/data/logfile.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "x": 720,
+        "y": 1020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e15cc6f7.169",
+        "type": "function",
+        "z": "8ef8462d.3e5728",
+        "name": "Convert radio in point",
+        "func": "var p = msg.payload;\nvar r = msg.payload.radio;\n\nvar deveui = p.devEUI;\nvar size = r.size;\n//var toa = r.toa;\n//var X_operator = r.X_operator;\n\nvar points = [];\n\n    var point = [{\n        rssi: r.rssi,\n        lsnr: r.loRaSNR,\n        size: p.size,\n        dr: r.dr,\n        redundancy: r.redundancy\n    },\n    {\n        deveui: p.devEUI,\n        deviceName: p.deviceName,\n        gatewayID: r.gatewayID,\n        datarate: r.dr,\n        appid: p.applicationID,\n        frequency: r.frequency/1000000.0,\n        region: \"eu868\",\n        subband: r.subband\n    }];\n\n    points.push(point);\n\nmsg.payload = points;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 440,
+        "y": 560,
+        "wires": [
+            [
+                "523e40e9.b6ef48",
+                "c39f6380.8cc0d"
+            ]
+        ]
+    },
+    {
+        "id": "69db27cf.f9d1d8",
+        "type": "link in",
+        "z": "8ef8462d.3e5728",
+        "name": "radio2point",
+        "links": [
+            "16cc577e.d91489",
+            "5a91beaa.681d28"
+        ],
+        "x": 175,
+        "y": 560,
+        "wires": [
+            [
+                "e15cc6f7.169"
+            ]
+        ]
+    },
+    {
+        "id": "87080696.c87eb",
+        "type": "inject",
+        "z": "8ef8462d.3e5728",
+        "name": "CREATE DATABASE lorawan",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 120,
+        "wires": [
+            [
+                "28a766a8.7a1002"
+            ]
+        ]
+    },
+    {
+        "id": "fe1c2f1a.8d093",
+        "type": "comment",
+        "z": "8ef8462d.3e5728",
+        "name": "Create the database by clicking on the node",
+        "info": "",
+        "x": 270,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "28a766a8.7a1002",
+        "type": "influxdb in",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "CREATE DATABASE lorawan",
+        "query": "CREATE DATABASE \"lorawan\" WITH DURATION 60d REPLICATION 1 SHARD DURATION 1h NAME \"sixty_days\"",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 560,
+        "y": 120,
+        "wires": [
+            [
+                "b829fa16.a0768"
+            ]
+        ]
+    },
+    {
+        "id": "b829fa16.a0768",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 910,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "b23a180e.9ebe18",
+        "type": "inject",
+        "z": "8ef8462d.3e5728",
+        "name": "DROP DATABASE lorawan",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 197,
+        "wires": [
+            [
+                "ff008771.e0032"
+            ]
+        ]
+    },
+    {
+        "id": "ff008771.e0032",
+        "type": "influxdb in",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "DROP DATABASE lorawan",
+        "query": "DROP DATABASE \"lorawan\"",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 560,
+        "y": 197,
+        "wires": [
+            [
+                "46b54aaf.b964cc"
+            ]
+        ]
+    },
+    {
+        "id": "46b54aaf.b964cc",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 910,
+        "y": 197,
+        "wires": []
+    },
+    {
+        "id": "26bb9b.c5eea466",
+        "type": "comment",
+        "z": "8ef8462d.3e5728",
+        "name": "Drop the database by clicking on the node",
+        "info": "",
+        "x": 260,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "5f8ee0a3.885e28",
+        "type": "function",
+        "z": "8ef8462d.3e5728",
+        "name": "Convert rx in point",
+        "func": "var p = msg.payload;\n\nvar phyPayloadBuffer = p.phyPayloadBuffer;\n\nvar rxInfo = p.rxInfo;\nvar txInfo = p.txInfo;\n\nvar point = [{\n    size: phyPayloadBuffer.length,\n    rssi: rxInfo.rssi,\n    lsnr: rxInfo.loRaSNR,\n    toa: rxInfo.toa\n},\n{\n    mac: rxInfo.gatewayID,\n    frametype: p.frametype,\n    operator: p.operator,\n    frequency: txInfo.frequency,\n    dr: rxInfo.dr,\n    redundancy: rxInfo.redundancy,\n    subband: rxInfo.subband,\n    sf: txInfo.loRaModulationInfo.spreadingFactor,\n    bw: txInfo.loRaModulationInfo.bandwidth\n}];\n\nif (p.devaddr) {\n    point[1].devaddr = p.devaddr;\n    point[1].operator = p.operator;\n    point[1].confirmed = p.confirmed;\n\n    msg.payload = point;\n    return msg;\n    \n} else if (p.deveui) {\n    point[1].deveui = p.deveui;\n    point[1].appeui = p.appeui;\n\n    msg.payload = point;\n    return msg;\n\n} else {\n    return undefined;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 430,
+        "y": 680,
+        "wires": [
+            [
+                "2a85e3e5.706ea4",
+                "332fc1a7.e06e1e"
+            ]
+        ]
+    },
+    {
+        "id": "a519db65.4d21b8",
+        "type": "influxdb out",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "data",
+        "measurement": "data",
+        "precision": "ms",
+        "retentionPolicy": "",
+        "x": 690,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "7ee603e8.d44f24",
+        "type": "influxdb out",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "tx",
+        "measurement": "tx",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 690,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "f821fb9e.713c38",
+        "type": "function",
+        "z": "8ef8462d.3e5728",
+        "name": "Convert tx in point",
+        "func": "var p = msg.payload;\n\nvar txInfo = p.txInfo;\nvar point = [{\n    size: txInfo.size,\n    toa: txInfo.toa,\n    power: txInfo.power\n},\n{\n    mac: txInfo.mac,\n    frequency: txInfo.frequency,\n    subband: txInfo.subband,\n    sf: txInfo.dataRate.spreadFactor,\n    bw: txInfo.dataRate.bandwidth,\n    dr: txInfo.dr\n}];\n\nmsg.payload = point;\nreturn msg;\n    \n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 430,
+        "y": 740,
+        "wires": [
+            [
+                "7ee603e8.d44f24",
+                "55964523.ab106c"
+            ]
+        ]
+    },
+    {
+        "id": "9407cfb0.3e17b8",
+        "type": "link in",
+        "z": "8ef8462d.3e5728",
+        "name": "gatewaytx2point",
+        "links": [
+            "b8435984.1c1a1",
+            "4abf3eef.0a6388"
+        ],
+        "x": 175,
+        "y": 740,
+        "wires": [
+            [
+                "f821fb9e.713c38"
+            ]
+        ]
+    },
+    {
+        "id": "36809190.0fa4a6",
+        "type": "influxdb in",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "DROP tx",
+        "query": "DROP MEASUREMENT tx",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 500,
+        "y": 403,
+        "wires": [
+            [
+                "c394074f.57539"
+            ]
+        ]
+    },
+    {
+        "id": "55964523.ab106c",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 850,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "332fc1a7.e06e1e",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 850,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "d3f5d430.bbe4b",
+        "type": "function",
+        "z": "8ef8462d.3e5728",
+        "name": "Convert points/object in influxdb point",
+        "func": "var p = msg.payload;\n\nvar r = p.radio;\n\nvar res = [];\n\nvar points = p.points;\n\nif(points) {\n    var i;\n    for(i=0; i < points.length; i++){\n        \n        var point = points[i];\n        // add radio metadata\n        point.rssi = r.rssi;\n        point.lsnr = r.loRaSNR;\n        point.dr = r.dr;\n        point.redundancy = r.redundancy;\n        point.fCnt = p.fCnt;\n\n        var pt =\n            [\n                point,\n                {\n                    devEUI: p.devEUI,\n                    applicationID: p.applicationID,\n                    deviceName: p.deviceName,\n                    applicationName: p.applicationName\n                }\n            ];\n        res.push(pt);\n    }\n    return res;\n} else {\n    var o = p.object;\n    if(o) {\n        if(Array.isArray(o)) {\n            o.forEach(function(e) {\n            // add timestamp  \n            e.object.time = e.timestamp;\n            // add radio metadata\n            e.object.rssi = r.rssi;\n            e.object.lsnr = r.loRaSNR;\n            e.object.dr = r.dr;\n            e.object.redundancy = r.redundancy;\n            e.object.fCnt = p.fCnt;\n\n\n            var point = [\n                e.object,\n                {\n                    devEUI: p.devEUI,\n                    applicationID: p.applicationID,\n                    deviceName: p.deviceName,\n                    applicationName: p.applicationName\n                }\n            ];\n            res.push(point)\n            });\n        } else {\n            if(o.series) {\n                o.series.forEach(function(s) {\n                    var timeShift = s._timeShift; // time shift in seconds\n                    delete s._timeShift;\n                    s.time = p.time + timeShift*1000;\n                    \n                    // add radio metadata\n                    s.rssi = r.rssi;\n                    s.lsnr = r.loRaSNR;\n                    s.dr = r.dr;\n                    s.redundancy = r.redundancy;\n                    s.fCnt = p.fCnt;\n\n                    var ptd = [\n                        s,\n                        {\n                            devEUI: p.devEUI,\n                            applicationID: p.applicationID,\n                            deviceName: p.deviceName,\n                            applicationName: p.applicationName\n                        }\n                    ];                    \n                    res.push(ptd)\n                });\n            } else {\n                // add radio metadata\n                o.rssi = r.rssi;\n                o.lsnr = r.loRaSNR;\n                o.dr = r.dr;\n                o.redundancy = r.redundancy;\n                o.fCnt = p.fCnt;\n    \n                var ptd = [\n                    o,\n                    {\n                        devEUI: p.devEUI,\n                        applicationID: p.applicationID,\n                        deviceName: p.deviceName,\n                        applicationName: p.applicationName\n                    }\n                ];\n                res.push(ptd)\n            }\n        }\n        msg.payload = res;\n        return msg;\n    } else {\n        return undefined;\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 820,
+        "wires": [
+            [
+                "a519db65.4d21b8",
+                "ac55a2d4.829ab"
+            ]
+        ]
+    },
+    {
+        "id": "ac55a2d4.829ab",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 850,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "1928da62.e77bce",
+        "type": "influxdb out",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "stat",
+        "measurement": "stat",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 690,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "4b00e4e3.78ac9c",
+        "type": "link in",
+        "z": "8ef8462d.3e5728",
+        "name": "stat2point",
+        "links": [
+            "ad6b127f.b7f52",
+            "923b95c6.16bb7",
+            "52791c0a.5295c4",
+            "0b1b419d2f89f560"
+        ],
+        "x": 175,
+        "y": 620,
+        "wires": [
+            [
+                "82389b4c.04829"
+            ]
+        ]
+    },
+    {
+        "id": "82389b4c.04829",
+        "type": "function",
+        "z": "8ef8462d.3e5728",
+        "name": "Convert stat in point",
+        "func": "var p = msg.payload;\nvar t = msg.topic;\n\nvar mac = (Buffer.from(p.gatewayID,\"base64\")).toString('hex');\n\nvar point = [{\n    rxPacketsReceived: p.rxPacketsReceived,\n    rxPacketsReceivedOK: p.rxPacketsReceivedOK,\n    txPacketsReceived: p.txPacketsReceived,\n    txPacketsEmitted: p.txPacketsEmitted\n},\n{\n    mac: mac\n}];\n\nvar l = p.location;\nif(l && (l !== null)) {\n    if(l.latitude) point[0].latitude = l.latitude;\n    if(l.longitude) point[0].longitude = l.longitude;\n    if(l.altitude) point[0].altitude = l.altitude;\n    if(l.accuracy) point[0].accuracy = l.accuracy;\n}\n\nmsg.payload = point;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 440,
+        "y": 620,
+        "wires": [
+            [
+                "1928da62.e77bce",
+                "147194d1.151e53"
+            ]
+        ]
+    },
+    {
+        "id": "19af70ce.736257",
+        "type": "influxdb in",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "DROP stat",
+        "query": "DROP MEASUREMENT stat",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 510,
+        "y": 440,
+        "wires": [
+            [
+                "c394074f.57539"
+            ]
+        ]
+    },
+    {
+        "id": "147194d1.151e53",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 890,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "c39f6380.8cc0d",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 890,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "ccf797c9.5cbf",
+        "type": "influxdb out",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "status",
+        "measurement": "status",
+        "precision": "ms",
+        "retentionPolicy": "",
+        "x": 690,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "ff0afa6c.f02548",
+        "type": "link in",
+        "z": "8ef8462d.3e5728",
+        "name": "status2point",
+        "links": [
+            "90ab080e.f6c338",
+            "909ee694.8a1608"
+        ],
+        "x": 175,
+        "y": 960,
+        "wires": [
+            [
+                "7413bf4a.ecb5a"
+            ]
+        ]
+    },
+    {
+        "id": "7413bf4a.ecb5a",
+        "type": "function",
+        "z": "8ef8462d.3e5728",
+        "name": "Convert status in influxdb point",
+        "func": "var p = msg.payload;\nvar pt =    [\n                {\n                   margin:p.margin,\n                   battery: p.battery,\n                   externalPowerSource: p.externalPowerSource ? 1 : 0,\n                   batteryLevel: p.batteryLevel,\n                   batteryLevelUnavailable: p.batteryLevelUnavailable ? 1 : 0\n                },\n                {\n                    devEUI: p.devEUI,\n                    applicationID: p.applicationID,\n                    deviceName: p.deviceName,\n                    applicationName: p.applicationName\n                }\n            ];\nmsg.payload = pt;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 410,
+        "y": 960,
+        "wires": [
+            [
+                "ccf797c9.5cbf",
+                "21a97a3.d4c4306"
+            ]
+        ]
+    },
+    {
+        "id": "d5d3b1cc.758b08",
+        "type": "influxdb in",
+        "z": "8ef8462d.3e5728",
+        "influxdb": "70b21447.a18194",
+        "name": "DROP status",
+        "query": "DROP MEASUREMENT status",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 510,
+        "y": 480,
+        "wires": [
+            [
+                "c394074f.57539"
+            ]
+        ]
+    },
+    {
+        "id": "21a97a3.d4c4306",
+        "type": "debug",
+        "z": "8ef8462d.3e5728",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 850,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "aa2e2309.8ab36",
+        "type": "mqtt in",
+        "z": "8c90c3c0.3ed818",
+        "name": "Application Ack",
+        "topic": "application/+/device/+/ack",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "475864c9.5c678c",
+        "inputs": 0,
+        "x": 120,
+        "y": 120,
+        "wires": [
+            [
+                "7d2e9592.a674ec"
+            ]
+        ]
+    },
+    {
+        "id": "589f1a6d.6f11c4",
+        "type": "mqtt in",
+        "z": "8c90c3c0.3ed818",
+        "name": "Application Error",
+        "topic": "application/+/device/+/error",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "475864c9.5c678c",
+        "inputs": 0,
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "7d2e9592.a674ec"
+            ]
+        ]
+    },
+    {
+        "id": "2b3dcb7a.888934",
+        "type": "debug",
+        "z": "8c90c3c0.3ed818",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 710,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "7d2e9592.a674ec",
+        "type": "json",
+        "z": "8c90c3c0.3ed818",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 490,
+        "y": 100,
+        "wires": [
+            [
+                "2b3dcb7a.888934"
+            ]
+        ]
+    },
+    {
+        "id": "e8248b66.2aed1",
+        "type": "json",
+        "z": "8c90c3c0.3ed818",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 490,
+        "y": 160,
+        "wires": [
+            [
+                "22c5ca9b.ee0dc6"
+            ]
+        ]
+    },
+    {
+        "id": "22c5ca9b.ee0dc6",
+        "type": "function",
+        "z": "8c90c3c0.3ed818",
+        "name": "add now",
+        "func": "\nmsg.payload.time = new Date().getTime();\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 700,
+        "y": 160,
+        "wires": [
+            [
+                "ff1ba348.c5d438",
+                "909ee694.8a1608"
+            ]
+        ]
+    },
+    {
+        "id": "ff1ba348.c5d438",
+        "type": "debug",
+        "z": "8c90c3c0.3ed818",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 930,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "909ee694.8a1608",
+        "type": "link out",
+        "z": "8c90c3c0.3ed818",
+        "name": "status",
+        "links": [
+            "ff0afa6c.f02548"
+        ],
+        "x": 875,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "60770530.d61afc",
+        "type": "mqtt in",
+        "z": "8c90c3c0.3ed818",
+        "name": "Application Status *",
+        "topic": "application/+/device/+/status",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "475864c9.5c678c",
+        "inputs": 0,
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "e8248b66.2aed1"
+            ]
+        ]
+    }
+]

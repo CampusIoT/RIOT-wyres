@@ -1,0 +1,31 @@
+# Copyright (C) UGA GINP  - All Rights Reserved
+# Written by Didier DONSEZ, 2016-2023
+
+version: "2"
+
+services:
+
+  nodered:
+    extends:
+      file: nodered.yml
+      service: nodered
+    links:
+      - influxdb:influxdb
+#      - thingsboard:thingsboard
+
+  influxdb:
+    extends:
+      file: influxdb.yml
+      service: influxdb
+
+  grafana:
+    extends:
+      file: grafana.yml
+      service: grafana
+    links:
+      - influxdb:influxdb
+
+#  thingsboard:
+#    extends:
+#      file: thingsboard.yml
+#      service: thingsboard

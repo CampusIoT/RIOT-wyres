@@ -1,0 +1,21 @@
+{
+    "admin": {
+        "editor": {
+            "view": {
+                "view-grid-size": "20",
+                "view-node-status": true,
+                "view-show-tips": true,
+                "view-snap-grid": true,
+                "view-show-grid": true,
+                "view-node-show-label": true,
+                "view-show-welcome-tours": true,
+                "view-store-position": false,
+                "view-store-zoom": false
+            },
+            "tours": {
+                "welcome": "3.1.0"
+            }
+        },
+        "menu-menu-item-sidebar": true
+    }
+}

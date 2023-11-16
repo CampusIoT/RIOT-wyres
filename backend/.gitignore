@@ -1,0 +1,5 @@
+*.backup
+configuration/nodered/.npm/
+data/influxdb/data
+data/influxdb/wal
+data/influxdb/meta
