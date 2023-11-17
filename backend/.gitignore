@@ -3,3 +3,5 @@ configuration/nodered/.npm/
 data/influxdb/data
 data/influxdb/wal
 data/influxdb/meta
+data/thingsboard/data
+data/thingsboard/logs

@@ -219,7 +219,8 @@
         "y": 240,
         "wires": [
             [
-                "cbebb845.774e68"
+                "cbebb845.774e68",
+                "9dcbc594eea4f992"
             ]
         ]
     },
@@ -242,6 +243,110 @@
                 "cbebb845.774e68"
             ]
         ]
+    },
+    {
+        "id": "8ad4a93e635957d0",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "extract objectJSON and token",
+        "func": "var p = msg.payload;\n\nvar o = p.object;\n\nif(o) {\n    var v = o._variables;\n    if(v) {\n        var t = v['ThingsBoardAccessToken'];\n        if(t) {\n            delete o._variables;\n            msg.urlapi = 'api/v1/' + t + '/telemetry';\n            msg.payload = o;\n            return msg;\n        }\n    }\n}\n\nreturn undefined;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 500,
+        "wires": [
+            [
+                "c8712c3fa4387a52"
+            ]
+        ]
+    },
+    {
+        "id": "c8712c3fa4387a52",
+        "type": "http request",
+        "z": "176e4c9f.1fe43b",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://thingsboard:9090/{{{urlapi}}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "Content-Type",
+                "valueType": "other",
+                "valueValue": "application/json"
+            }
+        ],
+        "x": 950,
+        "y": 500,
+        "wires": [
+            [
+                "2c8c29def47e9f55"
+            ]
+        ]
+    },
+    {
+        "id": "2c8c29def47e9f55",
+        "type": "debug",
+        "z": "176e4c9f.1fe43b",
+        "name": "Result request",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1180,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "9dcbc594eea4f992",
+        "type": "json",
+        "z": "176e4c9f.1fe43b",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 470,
+        "y": 500,
+        "wires": [
+            [
+                "8ad4a93e635957d0"
+            ]
+        ]
+    },
+    {
+        "id": "3ab70d650c9ed8e2",
+        "type": "comment",
+        "z": "176e4c9f.1fe43b",
+        "name": "Send decoded payload to Thingsboard service",
+        "info": "",
+        "x": 620,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "858fcd078fe962d6",
+        "type": "comment",
+        "z": "176e4c9f.1fe43b",
+        "name": "Send decoded payload to \"Save Data\"",
+        "info": "",
+        "x": 310,
+        "y": 160,
+        "wires": []
     },
     {
         "id": "27a7d2a5.b405a6",
@@ -273,7 +378,7 @@
         "initialize": "",
         "finalize": "",
         "x": 480,
-        "y": 220,
+        "y": 280,
         "wires": [
             [
                 "b7a128b1.2adae"
@@ -300,7 +405,7 @@
         "func": "var p = msg.payload;\nvar o = p.object;\nif(o){\n    if(o.latitude && o.longitude) {\n        return msg;\n    } else if(o.lat && o.lng) {\n        return msg;\n    }\n}\nreturn undefined;    \n",
         "outputs": 1,
         "noerr": 0,
-        "x": 720,
+        "x": 780,
         "y": 80,
         "wires": [
             [
@@ -358,9 +463,11 @@
         "name": "Flatten LPP",
         "func": "var p = msg.payload;\n\nfunction FlattenLPP(json) {\n    var o = {};\n    for (const p in json) {\n        var value = json[p];\n        if(typeof(value) === 'number') {\n            o[p] = value;\n        } else if(typeof(value) === 'object'){\n            for (const p2 in value) {\n                var value2 = value[p2];\n                if(typeof(value2) === 'number') {\n                    o[p + p2] = value2;\n                }\n            }\n        }\n    }\n    return o    \n}\n\nvar json = msg.payload.object;\n\nif(json) {\n    var o = FlattenLPP(json);\n    if(o) {\n        msg.payload.object = o;\n        return msg;\n    }\n}\n\nreturn undefined;\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
+        "libs": [],
         "x": 770,
         "y": 180,
         "wires": [
