@@ -19,6 +19,7 @@ L'objectif de ce tutoriel est
 * [Pilotage des capteurs MEMS](05.md)
 * [Communications LoRa](06.md)
 * [Communications dans un réseau des capteurs LoRaWAN](07.md)
+* [Communications dans un réseau des capteurs LoRaWAN (notions avancées)](07b.md)
 * [Collecte, stockage et affichage des mesures de capteurs LoRaWAN](08.md)
 * [Langages de programmation de haut niveau](09.md)
 * [Cryptographie](10.md)
