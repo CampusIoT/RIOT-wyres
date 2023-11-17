@@ -6,6 +6,9 @@ MAINTAINER CampusIoT didier.donsez@gmail.com
 
 RUN npm install node-red-admin
 
+# Add useful node-red nodes here
+# https://flows.nodered.org/search?type=node
+
 # RUN npm install node-red-dashboard
 # RUN npm install node-red-contrib-web-worldmap
 # RUN npm install node-red-node-geofence
