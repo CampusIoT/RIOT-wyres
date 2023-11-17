@@ -88,8 +88,8 @@
         "y": 240,
         "wires": [
             [
-                "9925749c.2b32c",
-                "f8db9a84.e4b37"
+                "f8db9a84.e4b37",
+                "feca07351167c24f"
             ]
         ]
     },
@@ -103,7 +103,7 @@
             "590961be.974788",
             "69db27cf.f9d1d8"
         ],
-        "x": 1235,
+        "x": 1385,
         "y": 240,
         "wires": []
     },
@@ -117,8 +117,8 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 1230,
-        "y": 340,
+        "x": 1390,
+        "y": 420,
         "wires": []
     },
     {
@@ -129,7 +129,7 @@
         "func": "\n\nfunction getSubBandsEU868(frequency) {\n    if(frequency>=863000000 && frequency<868000000) {\n        return \"g\";\n    } else if(frequency>=868000000 && frequency<868600000) {\n        return \"g1\";\n    } else if(frequency>=868700000 && frequency<869200000) {\n        return \"g2\";\n    } else if(frequency>=869400000 && frequency<869650000) {\n        return \"g3\";\n    } else if(frequency>=869700000 && frequency<870000000) {\n        return \"g4\";\n    } else {\n        return undefined;\n    }\n    /* Duty Cycle */\n    /*\n    g (863.0 – 868.0 MHz): 1%\n    g1 (868.0 – 868.6 MHz): 1%\n    g2 (868.7 – 869.2 MHz): 0.1%\n    g3 (869.4 – 869.65 MHz): 10%\n    g4 (869.7 – 870.0 MHz): 1%\n    */\n}\n\nvar p = msg.payload;\n\nvar rxInfo = p.rxInfo;\n\nvar ri = undefined;\n\nrxInfo.forEach(function(e) {\n  if(ri === undefined) {\n      ri = e;\n  } else if(e.rssi > ri.rssi) {\n      ri = e;\n  }\n});\n\nri.date = Date.now();\nri.dr = p.txInfo.dr;\nri.frequency = p.txInfo.frequency;\nri.subband = getSubBandsEU868(p.txInfo.frequency);\n// Can not compute timeonair without the frame length\n//ri.toa = TimeOnAir.getLoRaWANTimeOnAir(size, 0, ri.dr)\n\n\nri.redundancy = rxInfo.length;\n\nmsg.payload.radio = ri;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 960,
+        "x": 1100,
         "y": 240,
         "wires": [
             [
@@ -145,7 +145,7 @@
         "func": "if(msg.payload.data){\n    msg.payload.frmPayload = Buffer.from(msg.payload.data, 'base64');\n    msg.payload.size = msg.payload.frmPayload.length;\n} else {\n    msg.payload.size = 0;\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 745,
+        "x": 900,
         "y": 240,
         "wires": [
             [
@@ -161,7 +161,7 @@
         "func": "\nmsg.payload.time = new Date().getTime();\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 1120,
+        "x": 1260,
         "y": 240,
         "wires": [
             [
@@ -347,6 +347,26 @@
         "x": 310,
         "y": 160,
         "wires": []
+    },
+    {
+        "id": "feca07351167c24f",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "remove variables",
+        "func": "var p = msg.payload;\n\nvar o = p.object;\n\nif(o) {\n    var v = o._variables;\n    if(v) {\n        delete o._variables;\n    }\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 240,
+        "wires": [
+            [
+                "9925749c.2b32c"
+            ]
+        ]
     },
     {
         "id": "27a7d2a5.b405a6",
