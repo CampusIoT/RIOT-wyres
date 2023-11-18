@@ -85,6 +85,19 @@
 // Kerlink NetID 1 (24000000 - 25FFFFFF)
 #define DEVADDR_BASE_KERLINK							(0x24000000)
 
+// Birdz NetID 3 (E04E0000 - E04FFFFF)
+#define DEVADDR_BASE_BIRDZ							    (0xE04E0000)
+// Birdz NetID 3 (E0560000 - E057FFFF)
+#define DEVADDR_BASE_AMAZON							    (0xE0560000)
+
+// Eutelsat S.A. NetID 3 (E05C0000 - E05DFFFF)
+#define DEVADDR_BASE_EUTELSAT							(0xE05C0000)
+
+// Andorra Telecom NetID 3 (FC00A400 - FC00A7FF)
+#define DEVADDR_BASE_ANDORRA_TELECOM					(0xE05C0000)
+
+// Afnic NetID 6 (FC00BC00 - FC00BFFF)
+#define DEVADDR_BASE_AFNIC					            (0xFC00BC00)
 
 
 #define IS_BELONGING_TO_NETWORK(devaddr,devaddr_subnet,devaddr_mask) ( devaddr_subnet == ( devaddr & devaddr_mask ))
@@ -134,9 +147,17 @@ static const lorawan_network_t lorawan_networks[] = {
 
 		{ DEVADDR_BASE_SCHNEIDER_ELECTRIC, DEVADDR_MASK_NETID3, "Schneider Electric"},
 
+		{ DEVADDR_BASE_BIRDZ, DEVADDR_MASK_NETID3, "Birdz"},
+		{ DEVADDR_BASE_AMAZON, DEVADDR_MASK_NETID3, "Amazon"},
+		{ DEVADDR_BASE_ANDORRA_TELECOM, DEVADDR_MASK_NETID3, "Andorra Telecom"},
+
+		{ DEVADDR_BASE_AFNIC, DEVADDR_MASK_NETID6, "Afnic"},
+
+		{ DEVADDR_BASE_EUTELSAT, DEVADDR_MASK_NETID3, "Eutelsat S.A."},
 		{ DEVADDR_BASE_LACUNA, DEVADDR_MASK_NETID6, "Lacuna Space"},
 		{ DEVADDR_BASE_HIBER, DEVADDR_MASK_NETID6, "Hiber"},
 		{ DEVADDR_BASE_REQUEA, DEVADDR_MASK_NETID6, "Requea"},
+        
 		{ DEVADDR_BASE_UGA, DEVADDR_MASK_NETID6, "Université Grenoble Alpes"}
 };
 
