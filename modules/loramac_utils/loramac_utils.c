@@ -25,6 +25,7 @@
 
 #include "net/loramac.h"
 #include "semtech_loramac.h"
+#include "lorawan_network.h"
 
 #include <string.h>
 
@@ -237,7 +238,7 @@ void loramac_utils_forge_euis_and_key(uint8_t *deveui, uint8_t *appeui, uint8_t 
 }
 #endif
 
-
+#if 0
 #define DEVADDR_MASK_NETID1								(0xFE000000)
 #define DEVADDR_MASK_NETID3								(0xFFFE0000)
 #define DEVADDR_MASK_NETID6								(0xFFFFFC00)
@@ -348,3 +349,4 @@ const char* loramac_utils_get_lorawan_network(const uint32_t devaddr) {
 	return "Unknown";
 }
 
+#endif

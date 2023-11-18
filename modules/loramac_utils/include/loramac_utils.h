@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 INRIA
+ * Copyright (C) 2020-2023 UGA LIG
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -36,8 +36,11 @@ extern "C"
 
     void loramac_utils_forge_euis_and_key(uint8_t *deveui, uint8_t *appeui, uint8_t *appkey, const uint8_t* secret);
 
-    const char* loramac_utils_get_lorawan_network(const uint32_t devaddr);
-
     void printf_ba(const uint8_t* ba, size_t len);
+
+#ifdef __cplusplus
+extern "C"
+}
+#endif
 
 #endif

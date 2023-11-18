@@ -1,0 +1,4 @@
+USEMODULE += semtech-loramac
+
+FEATURES_OPTIONAL += periph_rtc
+FEATURES_REQUIRED += periph_cpuid

@@ -17,6 +17,10 @@ all:
 	$(info $$AT30TES75X is ${AT30TES75X})
 	$(info $$GPS is ${GPS})
 
+# External modules
+EXTERNAL_MODULE_DIRS += ../../modules
+
+USEMODULE += loramac_utils
 
 # Path to my boards
 EXTERNAL_BOARD_DIRS ?= ../../boards
