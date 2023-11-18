@@ -14,9 +14,9 @@ BOARD ?= wyres-base
 
 USEMODULE += od
 USEMODULE += ps
-#USEMODULE += shell_cmds_default
 USEMODULE += shell
-USEMODULE += shell_commands
+USEMODULE += shell_cmds_default
+#USEMODULE += shell_commands
 USEMODULE += fmt
 
 DRIVER ?= sx1272
