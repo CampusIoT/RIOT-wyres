@@ -19,8 +19,8 @@ Board hardware:
  - UART(1) : MCU based : external grove connector
  - SPI(2) : MCU based : 1 dedicated for radio, 1 on header
  - I2C(1) : MCU based : external grove connector
- - Accelero : ST [LIS2DE12](https://github.com/RIOT-OS/RIOT/tree/master/tests/driver_lis2dh12) via I2C 
- - Altimeter : ST [LPS22HB](https://github.com/RIOT-OS/RIOT/tree/master/tests/driver_lpsxxx) via I2C
+ - Accelero : ST [LIS2DE12](https://github.com/RIOT-OS/RIOT/tree/master/tests/drivers/lis2dh12) via I2C 
+ - Altimeter : ST [LPS22HB](https://github.com/RIOT-OS/RIOT/tree/master/tests/drivers/lpsxxx) via I2C
  - light sensitive trans. on GPIO
  - [SPH0641LM4H-1](https://www.knowles.com/docs/default-source/default-document-library/sph0641lm4h-1_morello_datasheet.pdf) MEMS microphone on I2S bus
  - Semtech Lora radio SX1272/SX1261 on SPI bus
@@ -31,7 +31,10 @@ Board hardware:
 
 ![](../../docs/wyldthings-01.jpg)
 
-### Pinout
+## Pinout
+
+https://github.com/wyres/mynewt-wbasev2-bsp/blob/master/w_base/include/bsp/bsp_defs.h
+
 
     UART_0_PIN_TX: 	'MCU_GPIO_PORTA(9)'
     UART_0_PIN_RX: 	'MCU_GPIO_PORTA(10)'
@@ -97,10 +100,6 @@ Connect the board's pins to the STLink flasher
 
 ![STLink V2 Clone header](stlinkv2_clone_header.png)
 
-
-## Pinout
-
-https://github.com/wyres/mynewt-wbasev2-bsp/blob/master/w_base/include/bsp/bsp_defs.h
 
 
 ## Requirements for flashing and debugging
