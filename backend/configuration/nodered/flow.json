@@ -117,25 +117,9 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 1390,
-        "y": 420,
+        "x": 1290,
+        "y": 340,
         "wires": []
-    },
-    {
-        "id": "9be17ce9.a1dbc8",
-        "type": "function",
-        "z": "176e4c9f.1fe43b",
-        "name": "add radio",
-        "func": "\n\nfunction getSubBandsEU868(frequency) {\n    if(frequency>=863000000 && frequency<868000000) {\n        return \"g\";\n    } else if(frequency>=868000000 && frequency<868600000) {\n        return \"g1\";\n    } else if(frequency>=868700000 && frequency<869200000) {\n        return \"g2\";\n    } else if(frequency>=869400000 && frequency<869650000) {\n        return \"g3\";\n    } else if(frequency>=869700000 && frequency<870000000) {\n        return \"g4\";\n    } else {\n        return undefined;\n    }\n    /* Duty Cycle */\n    /*\n    g (863.0 – 868.0 MHz): 1%\n    g1 (868.0 – 868.6 MHz): 1%\n    g2 (868.7 – 869.2 MHz): 0.1%\n    g3 (869.4 – 869.65 MHz): 10%\n    g4 (869.7 – 870.0 MHz): 1%\n    */\n}\n\nvar p = msg.payload;\n\nvar rxInfo = p.rxInfo;\n\nvar ri = undefined;\n\nrxInfo.forEach(function(e) {\n  if(ri === undefined) {\n      ri = e;\n  } else if(e.rssi > ri.rssi) {\n      ri = e;\n  }\n});\n\nri.date = Date.now();\nri.dr = p.txInfo.dr;\nri.frequency = p.txInfo.frequency;\nri.subband = getSubBandsEU868(p.txInfo.frequency);\n// Can not compute timeonair without the frame length\n//ri.toa = TimeOnAir.getLoRaWANTimeOnAir(size, 0, ri.dr)\n\n\nri.redundancy = rxInfo.length;\n\nmsg.payload.radio = ri;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1100,
-        "y": 240,
-        "wires": [
-            [
-                "6b3b2577.b925bc"
-            ]
-        ]
     },
     {
         "id": "9925749c.2b32c",
@@ -149,7 +133,7 @@
         "y": 240,
         "wires": [
             [
-                "9be17ce9.a1dbc8"
+                "a880048b3afe6574"
             ]
         ]
     },
@@ -240,7 +224,8 @@
         "y": 340,
         "wires": [
             [
-                "cbebb845.774e68"
+                "cbebb845.774e68",
+                "9dcbc594eea4f992"
             ]
         ]
     },
@@ -248,19 +233,19 @@
         "id": "8ad4a93e635957d0",
         "type": "function",
         "z": "176e4c9f.1fe43b",
-        "name": "extract objectJSON and token",
-        "func": "var p = msg.payload;\n\nvar o = p.object;\n\nif(o) {\n    var v = o._variables;\n    if(v) {\n        var t = v['ThingsBoardAccessToken'];\n        if(t) {\n            delete o._variables;\n            msg.urlapi = 'api/v1/' + t + '/telemetry';\n            msg.payload = o;\n            return msg;\n        }\n    }\n}\n\nreturn undefined;",
+        "name": "extract token",
+        "func": "var p = msg.payload;\n\nvar o = p.object;\n\nif(o) {\n    var v = o._variables;\n    if(v) {\n        var t = v['ThingsBoardAccessToken'];\n        if(t) {\n            delete o._variables;\n            msg.urlapi = 'api/v1/' + t + '/telemetry';\n            //msg.payload = o;\n            return msg;\n        }\n    }\n}\n\nreturn undefined;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 710,
+        "x": 650,
         "y": 500,
         "wires": [
             [
-                "c8712c3fa4387a52"
+                "f47ca63593d381d4"
             ]
         ]
     },
@@ -287,8 +272,8 @@
                 "valueValue": "application/json"
             }
         ],
-        "x": 950,
-        "y": 500,
+        "x": 1190,
+        "y": 640,
         "wires": [
             [
                 "2c8c29def47e9f55"
@@ -308,8 +293,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1180,
-        "y": 500,
+        "x": 1380,
+        "y": 640,
         "wires": []
     },
     {
@@ -334,7 +319,7 @@
         "z": "176e4c9f.1fe43b",
         "name": "Send decoded payload to Thingsboard service",
         "info": "",
-        "x": 620,
+        "x": 680,
         "y": 440,
         "wires": []
     },
@@ -367,6 +352,120 @@
                 "9925749c.2b32c"
             ]
         ]
+    },
+    {
+        "id": "ce39d69145d48aaa",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "extract decoded object",
+        "func": "var p = msg.payload;\n\nvar o = p.object;\n\nif (o) {\n    msg.payload = o;\n    return msg;\n}\n\nreturn undefined;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 640,
+        "wires": [
+            [
+                "c8712c3fa4387a52",
+                "f14e1a6f6b1f0d6a"
+            ]
+        ]
+    },
+    {
+        "id": "a174fd15e3a4a556",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "include radio properties",
+        "func": "var p = msg.payload;\n\nvar o = p.object;\n\nif (o) {\n    var r = p.radio;\n    o.fCnt = p.fCnt;\n    o.redundancy = r.redundancy;\n    o.dr = r.dr;\n    o.esp = r.esp;\n    o.rssi = r.rssi;\n    o.lsnr = r.loRaSNR;\n    return msg;\n}\n\nreturn undefined;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 500,
+        "wires": [
+            [
+                "ce39d69145d48aaa",
+                "dbab14c4e0851ec5"
+            ]
+        ]
+    },
+    {
+        "id": "f14e1a6f6b1f0d6a",
+        "type": "debug",
+        "z": "176e4c9f.1fe43b",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1200,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "f47ca63593d381d4",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "add radio",
+        "func": "function esp(rssi, snr) {\n    return rssi + snr - (10 * Math.log10(1 + Math.pow(10, 0.1 * snr)));\n}\n\nfunction getSubBandsEU868(frequency) {\n    if(frequency>=863000000 && frequency<868000000) {\n        return \"g\";\n    } else if(frequency>=868000000 && frequency<868600000) {\n        return \"g1\";\n    } else if(frequency>=868700000 && frequency<869200000) {\n        return \"g2\";\n    } else if(frequency>=869400000 && frequency<869650000) {\n        return \"g3\";\n    } else if(frequency>=869700000 && frequency<870000000) {\n        return \"g4\";\n    } else {\n        return undefined;\n    }\n    /* Duty Cycle */\n    /*\n    g (863.0 – 868.0 MHz): 1%\n    g1 (868.0 – 868.6 MHz): 1%\n    g2 (868.7 – 869.2 MHz): 0.1%\n    g3 (869.4 – 869.65 MHz): 10%\n    g4 (869.7 – 870.0 MHz): 1%\n    */\n}\n\nvar p = msg.payload;\n\nvar rxInfo = p.rxInfo;\n\nvar ri = undefined;\n\nrxInfo.forEach(function(e) {\n    e.esp = esp(e.rssi, e.loRaSNR);\n    if (ri === undefined) {\n        ri = e;\n    } else if (e.esp > ri.esp) {\n        ri = e;\n    }\n});\n\nif(ri) {\n    ri.date = Date.now();\n    ri.dr = p.txInfo.dr;\n    ri.frequency = p.txInfo.frequency;\n    ri.subband = getSubBandsEU868(p.txInfo.frequency);\n    // Can not compute timeonair without the frame length\n    //ri.toa = TimeOnAir.getLoRaWANTimeOnAir(size, 0, ri.dr)\n\n    ri.redundancy = rxInfo.length;\n    \n    msg.payload.radio = ri;\n\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 500,
+        "wires": [
+            [
+                "a174fd15e3a4a556"
+            ]
+        ]
+    },
+    {
+        "id": "a880048b3afe6574",
+        "type": "function",
+        "z": "176e4c9f.1fe43b",
+        "name": "add radio",
+        "func": "function esp(rssi, snr) {\n    return rssi + snr - (10 * Math.log10(1 + Math.pow(10, 0.1 * snr)));\n}\n\nfunction getSubBandsEU868(frequency) {\n    if(frequency>=863000000 && frequency<868000000) {\n        return \"g\";\n    } else if(frequency>=868000000 && frequency<868600000) {\n        return \"g1\";\n    } else if(frequency>=868700000 && frequency<869200000) {\n        return \"g2\";\n    } else if(frequency>=869400000 && frequency<869650000) {\n        return \"g3\";\n    } else if(frequency>=869700000 && frequency<870000000) {\n        return \"g4\";\n    } else {\n        return undefined;\n    }\n    /* Duty Cycle */\n    /*\n    g (863.0 – 868.0 MHz): 1%\n    g1 (868.0 – 868.6 MHz): 1%\n    g2 (868.7 – 869.2 MHz): 0.1%\n    g3 (869.4 – 869.65 MHz): 10%\n    g4 (869.7 – 870.0 MHz): 1%\n    */\n}\n\nvar p = msg.payload;\n\nvar rxInfo = p.rxInfo;\n\nvar ri = undefined;\n\nrxInfo.forEach(function(e) {\n    e.esp = esp(e.rssi, e.loRaSNR);\n    if (ri === undefined) {\n        ri = e;\n    } else if (e.esp > ri.esp) {\n        ri = e;\n    }\n});\n\nif(ri) {\n    ri.date = Date.now();\n    ri.dr = p.txInfo.dr;\n    ri.frequency = p.txInfo.frequency;\n    ri.subband = getSubBandsEU868(p.txInfo.frequency);\n    // Can not compute timeonair without the frame length\n    //ri.toa = TimeOnAir.getLoRaWANTimeOnAir(size, 0, ri.dr)\n\n    ri.redundancy = rxInfo.length;\n    \n    msg.payload.radio = ri;\n\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1100,
+        "y": 240,
+        "wires": [
+            [
+                "6b3b2577.b925bc"
+            ]
+        ]
+    },
+    {
+        "id": "dbab14c4e0851ec5",
+        "type": "debug",
+        "z": "176e4c9f.1fe43b",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 500,
+        "wires": []
     },
     {
         "id": "27a7d2a5.b405a6",
