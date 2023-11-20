@@ -28,6 +28,14 @@
         "info": ""
     },
     {
+        "id": "21418f8b6879f05a",
+        "type": "tab",
+        "label": "Downlink",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "e038e18.c53e52",
         "type": "tls-config",
         "name": "",
@@ -338,7 +346,7 @@
         "type": "function",
         "z": "176e4c9f.1fe43b",
         "name": "remove variables",
-        "func": "var p = msg.payload;\n\nvar o = p.object;\n\nif(o) {\n    var v = o._variables;\n    if(v) {\n        delete o._variables;\n    }\n}\n\nreturn msg;\n",
+        "func": "var p = msg.payload;\n\nvar o = p.object;\n\nif(o) {\n    var v = o._variables;\n    if(v) {\n        msg.variables = v;\n        delete o._variables;\n    }\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1449,6 +1457,170 @@
         "wires": [
             [
                 "e8248b66.2aed1"
+            ]
+        ]
+    },
+    {
+        "id": "426c462bfd53f283",
+        "type": "mqtt out",
+        "z": "21418f8b6879f05a",
+        "name": "LNS",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "475864c9.5c678c",
+        "x": 1130,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "c5aae490841e6784",
+        "type": "inject",
+        "z": "21418f8b6879f05a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 140,
+        "wires": [
+            [
+                "149979738d740b15"
+            ]
+        ]
+    },
+    {
+        "id": "4cd3cff96d100a89",
+        "type": "function",
+        "z": "21418f8b6879f05a",
+        "name": "Enqueue downlink to FTD 20CAC",
+        "func": "let APPID = 12 ;\nlet DEVEUI = '0018b20000020cac';\nlet FPORT = 10;\n\n// https://www.chirpstack.io/application-server/integrations/mqtt/\nmsg.topic = 'application/' + APPID + '/device/' + DEVEUI + '/command/down';\n\n// Since Chirpstack version is 3.5\nmsg.topic = 'application/'+APPID+'/device/'+DEVEUI+'/tx';\n\nlet p = msg.payload;\n\nif(typeof p === 'string') {\n    let base64str = Buffer.from(msg.payload, \"utf-8\").toString('base64');\n    msg.payload = {\n        //    \"devEui\": DEVEUI,           // this must match the DEV_EUI of the MQTT topic\n        \"confirmed\": true,            // whether the payload must be sent as confirmed data down or not\n        \"fPort\": FPORT,                  // FPort to use (must be > 0)\n        \"data\": base64str             // base64 encoded data (plaintext, will be encrypted by ChirpStack)\n    }\n} else {\n    msg.payload = {\n        //    \"devEui\": DEVEUI,           // this must match the DEV_EUI of the MQTT topic\n        \"confirmed\": true,                // whether the payload must be sent as confirmed data down or not\n        \"fPort\": FPORT,                   // FPort to use (must be > 0)\n        \"object\": msg.payload            \n    }\n\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 200,
+        "wires": [
+            [
+                "426c462bfd53f283",
+                "9028e61ef6b13e52"
+            ]
+        ]
+    },
+    {
+        "id": "e3d7e904e7604333",
+        "type": "comment",
+        "z": "21418f8b6879f05a",
+        "name": "Docs",
+        "info": "Version 4\n\nhttps://www.chirpstack.io/docs/chirpstack/integrations/mqtt.html#scheduling-a-downlink\n\nVersion 3\nhttps://www.chirpstack.io/application-server/integrations/mqtt/\n",
+        "x": 190,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "9028e61ef6b13e52",
+        "type": "debug",
+        "z": "21418f8b6879f05a",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "149979738d740b15",
+        "type": "function",
+        "z": "21418f8b6879f05a",
+        "name": "Say Hello",
+        "func": "msg.payload = 'HELLO YAOUNDE';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 140,
+        "wires": [
+            [
+                "4cd3cff96d100a89"
+            ]
+        ]
+    },
+    {
+        "id": "6f8602357ff42707",
+        "type": "inject",
+        "z": "21418f8b6879f05a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 260,
+        "wires": [
+            [
+                "25341f3c9b91cf16"
+            ]
+        ]
+    },
+    {
+        "id": "25341f3c9b91cf16",
+        "type": "function",
+        "z": "21418f8b6879f05a",
+        "name": "Build THP",
+        "func": "msg.payload = {\n    temperature: 25.7,\n    humidity: 57,\n    pressure: 850\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 260,
+        "wires": [
+            [
+                "4cd3cff96d100a89"
             ]
         ]
     }
