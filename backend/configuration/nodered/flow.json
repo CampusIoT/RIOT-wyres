@@ -1623,5 +1623,79 @@
                 "4cd3cff96d100a89"
             ]
         ]
+    },
+    {
+        "id": "49b8bc5405a77918",
+        "type": "debug",
+        "z": "21418f8b6879f05a",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "3bb6b42892f1ebca",
+        "type": "mqtt in",
+        "z": "21418f8b6879f05a",
+        "name": "",
+        "topic": "application/12/device/0018b20000020cac/txack",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "475864c9.5c678c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 420,
+        "wires": [
+            [
+                "49b8bc5405a77918"
+            ]
+        ]
+    },
+    {
+        "id": "455b78700714f756",
+        "type": "mqtt in",
+        "z": "21418f8b6879f05a",
+        "name": "",
+        "topic": "application/12/device/0018b20000020cac/error",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "475864c9.5c678c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 520,
+        "wires": [
+            [
+                "3951ae7111543209"
+            ]
+        ]
+    },
+    {
+        "id": "3951ae7111543209",
+        "type": "debug",
+        "z": "21418f8b6879f05a",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 520,
+        "wires": []
     }
 ]
