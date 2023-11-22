@@ -30,3 +30,10 @@ L'objectif de ce tutoriel est
 ## Liens utiles
 * [Cours sur RIOT OS en anglais](https://github.com/RIOT-OS/riot-course)
 * [Tutoriel de CampusIoT](https://github.com/CampusIoT/tutorial)
+
+## Soutiens
+Ce tutoriel a été réalisé avec le soutien
+* de l'institut [MIAI](https://miai.univ-grenoble-alpes.fr/),
+* du labex [Persyval Lab](https://persyval-lab.org/),
+* du laboratoire [LIG](https://www.liglab.fr/),
+* et du fablab [FabMASTIC](https://fabmstic.imag.fr/)
