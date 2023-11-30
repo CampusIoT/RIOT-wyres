@@ -1,5 +1,7 @@
 # Solar Position and Intensity
 
+From https://www.nrel.gov/grid/solar-resource/solpos.html
+
 NREL's Solar Position and Intensity (SOLPOS 2.0) C function calculates the apparent solar position and intensity (theoretical maximum solar energy) based on date, time, and location on Earth.
 
 By accessing these files, you agree to abide by the NREL data disclaimer. This software has been tested on a variety of platforms, but it is not guaranteed to work on yours. It is provided here as a convenience
