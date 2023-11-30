@@ -10,6 +10,8 @@ EXTERNAL_BOARD_DIRS ?= ../../boards
 # If no BOARD is found in the environment, use this default:
 BOARD ?= wyres-base
 
+include git.mk
+
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
