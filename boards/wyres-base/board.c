@@ -26,7 +26,7 @@ void board_init(void)
 
     gpio_init(LIGHT_SENSOR_SUPPLY_PIN, GPIO_OUT);  /* PB6 */
 
-    gpio_init(BTN1_PIN, GPIO_IN);  /* PB3 */
+    gpio_init(BTN1_PIN, GPIO_IN_PD);  /* PB3 */
 
 #ifdef TODO
 #error TODO gpio_init for SPEAKER_PWM_PIN

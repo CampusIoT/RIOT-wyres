@@ -50,7 +50,7 @@ extern "C" {
  * @name    Timer configuration
  * @{
  */
-#if 1
+#if 0
 static const timer_conf_t timer_config[] = {
     {
         .dev      = TIM2,
