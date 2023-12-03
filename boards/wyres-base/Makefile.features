@@ -11,6 +11,7 @@ FEATURES_PROVIDED += periph_rtc
 FEATURES_PROVIDED += periph_spi periph_spi_gpio_mode
 FEATURES_PROVIDED += periph_timer
 FEATURES_PROVIDED += periph_uart
+#FEATURES_PROVIDED += periph_vbat
 
 # Put other features for this board (in alphabetical order)
 FEATURES_PROVIDED += riotboot
