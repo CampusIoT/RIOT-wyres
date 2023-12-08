@@ -70,24 +70,19 @@
         "clientid": "",
         "autoConnect": true,
         "usetls": true,
-        "protocolVersion": "4",
+        "protocolVersion": 4,
         "keepalive": "60",
         "cleansession": true,
         "autoUnsubscribe": true,
         "birthTopic": "",
         "birthQos": "0",
         "birthPayload": "",
-        "birthMsg": {},
         "closeTopic": "",
         "closeQos": "0",
         "closePayload": "",
-        "closeMsg": {},
         "willTopic": "",
         "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
+        "willPayload": ""
     },
     {
         "id": "cbebb845.774e68",
@@ -121,20 +116,6 @@
         "wires": []
     },
     {
-        "id": "a9ef9d47.882218",
-        "type": "debug",
-        "z": "176e4c9f.1fe43b",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 1290,
-        "y": 340,
-        "wires": []
-    },
-    {
         "id": "9925749c.2b32c",
         "type": "function",
         "z": "176e4c9f.1fe43b",
@@ -162,8 +143,8 @@
         "y": 240,
         "wires": [
             [
-                "a9ef9d47.882218",
-                "5a91beaa.681d28"
+                "5a91beaa.681d28",
+                "a61a0eb07b1c029d"
             ]
         ]
     },
@@ -204,16 +185,16 @@
         "id": "bd9c77c369b146ca",
         "type": "mqtt in",
         "z": "176e4c9f.1fe43b",
-        "name": "Application Rx Wyres Yaoudé",
+        "name": "Application Rx Wyres Yaoudé Student",
         "topic": "application/311/device/+/rx",
         "qos": "2",
-        "datatype": "auto",
+        "datatype": "auto-detect",
         "broker": "475864c9.5c678c",
         "nl": false,
         "rap": false,
         "inputs": 0,
-        "x": 200,
-        "y": 240,
+        "x": 190,
+        "y": 260,
         "wires": [
             [
                 "cbebb845.774e68",
@@ -342,8 +323,8 @@
         "z": "176e4c9f.1fe43b",
         "name": "Send decoded payload to \"Save Data\"",
         "info": "",
-        "x": 310,
-        "y": 160,
+        "x": 230,
+        "y": 60,
         "wires": []
     },
     {
@@ -469,7 +450,7 @@
         "type": "debug",
         "z": "176e4c9f.1fe43b",
         "name": "debug 2",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -479,6 +460,43 @@
         "x": 1340,
         "y": 500,
         "wires": []
+    },
+    {
+        "id": "a61a0eb07b1c029d",
+        "type": "debug",
+        "z": "176e4c9f.1fe43b",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "1a759280859767f6",
+        "type": "mqtt in",
+        "z": "176e4c9f.1fe43b",
+        "name": "Application Rx Wyres I2HM Yaoudé",
+        "topic": "application/281/devices/+/rx",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "475864c9.5c678c",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 220,
+        "y": 180,
+        "wires": [
+            [
+                "cbebb845.774e68",
+                "9dcbc594eea4f992"
+            ]
+        ]
     },
     {
         "id": "27a7d2a5.b405a6",
