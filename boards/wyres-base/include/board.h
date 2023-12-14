@@ -71,7 +71,6 @@ extern "C" {
  * @name Macros for controlling the on-board LEDs.
  * @{
  */
-//#define LED0_PIN            	GPIO_PIN(PORT_A,15)
 #define LED_RED_PIN            	GPIO_PIN(PORT_A,15)
 #define LED_RED_PORT           	GPIOA
 #define LED_RED_MASK           	(1 << 15)
@@ -80,7 +79,6 @@ extern "C" {
 #define LED_RED_OFF            	(LED_RED_PORT->BSRR |= LED_RED_MASK<<16)
 #define LED_RED_TOGGLE         	(LED_RED_PORT->ODR  ^= LED_RED_MASK)
 
-//#define LED1_PIN            	GPIO_PIN(PORT_A,0)
 #define LED_GREEN_PIN           GPIO_PIN(PORT_A,0)
 #define LED_GREEN_PORT          GPIOA
 #define LED_GREEN_MASK          (1)
@@ -94,9 +92,9 @@ extern "C" {
  * @name Light sensor supply
  * @{
  */
-#define LIGHT_SENSOR_SUPPLY_PIN            GPIO_PIN(PORT_B,6)
-#define LIGHT_SENSOR_SUPPLY_PORT           GPIOB
-#define LIGHT_SENSOR_SUPPLY_MASK           (1 << 6)
+#define LIGHT_SENSOR_SUPPLY_PIN            GPIO_PIN(PORT_A,3)
+#define LIGHT_SENSOR_SUPPLY_PORT           GPIOA
+#define LIGHT_SENSOR_SUPPLY_MASK           (1 << 3)
 
 #define LIGHT_SENSOR_SUPPLY_ON             (LIGHT_SENSOR_SUPPLY_PORT->BSRR |= LIGHT_SENSOR_SUPPLY_MASK)
 #define LIGHT_SENSOR_SUPPLY_OFF            (LIGHT_SENSOR_SUPPLY_PORT->BSRR |= LIGHT_SENSOR_SUPPLY_MASK<<16)
