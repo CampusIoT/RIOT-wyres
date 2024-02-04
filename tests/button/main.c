@@ -24,12 +24,12 @@ int main(void)
 	
 
 	while(1){
-		while(gpio_read(BTN1_PIN) == btn_state);
-		btn_state = gpio_read(BTN1_PIN);
+		while(gpio_read(BTN0_PIN) == btn_state);
+		btn_state = gpio_read(BTN0_PIN);
 		if(btn_state){
-			printf("Button 1 has been pressed!\r\n");
+			printf("Button 0 has been pressed!\r\n");
 		}else{
-			printf("Button 1 has been released!\r\n");
+			printf("Button 0 has been released!\r\n");
 		}
 	}
 	

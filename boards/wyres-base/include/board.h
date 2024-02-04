@@ -126,12 +126,12 @@ extern "C" {
 
 
 /**
- * @name Button 1 on pads TP7/TP10
+ * @name Button 0 on pads TP7/TP10
  * @{
  */
-#define BTN1_PIN            				GPIO_PIN(PORT_B,3)
-#define BTN1_PORT           				GPIOB
-#define BTN1_MASK           				(1 << 3)
+#define BTN0_PIN            				GPIO_PIN(PORT_B,3)
+#define BTN0_PORT           				GPIOB
+#define BTN0_MASK           				(1 << 3)
 
 /** @} */
 
