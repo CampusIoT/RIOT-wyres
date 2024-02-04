@@ -74,6 +74,7 @@ extern "C" {
 #define LED_RED_PIN            	GPIO_PIN(PORT_A,15)
 #define LED_RED_PORT           	GPIOA
 #define LED_RED_MASK           	(1 << 15)
+#define LED_RED_MODE           	GPIO_OUT
 
 #define LED_RED_ON             	(LED_RED_PORT->BSRR |= LED_RED_MASK)
 #define LED_RED_OFF            	(LED_RED_PORT->BSRR |= LED_RED_MASK<<16)
@@ -82,6 +83,7 @@ extern "C" {
 #define LED_GREEN_PIN           GPIO_PIN(PORT_A,0)
 #define LED_GREEN_PORT          GPIOA
 #define LED_GREEN_MASK          (1)
+#define LED_GREEN_MODE           GPIO_OUT
 
 #define LED_GREEN_ON            (LED_GREEN_PORT->BSRR |= LED_GREEN_MASK)
 #define LED_GREEN_OFF           (LED_GREEN_PORT->BSRR |= LED_GREEN_MASK<<16)
@@ -95,6 +97,7 @@ extern "C" {
 #define LIGHT_SENSOR_SUPPLY_PIN            GPIO_PIN(PORT_A,3)
 #define LIGHT_SENSOR_SUPPLY_PORT           GPIOA
 #define LIGHT_SENSOR_SUPPLY_MASK           (1 << 3)
+#define LIGHT_SENSOR_SUPPLY_MODE           GPIO_OUT
 
 #define LIGHT_SENSOR_SUPPLY_ON             (LIGHT_SENSOR_SUPPLY_PORT->BSRR |= LIGHT_SENSOR_SUPPLY_MASK)
 #define LIGHT_SENSOR_SUPPLY_OFF            (LIGHT_SENSOR_SUPPLY_PORT->BSRR |= LIGHT_SENSOR_SUPPLY_MASK<<16)
@@ -132,6 +135,7 @@ extern "C" {
 #define BTN0_PIN            				GPIO_PIN(PORT_B,3)
 #define BTN0_PORT           				GPIOB
 #define BTN0_MASK           				(1 << 3)
+#define BTN0_MODE           				GPIO_IN_PD
 
 /** @} */
 

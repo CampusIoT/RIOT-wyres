@@ -21,12 +21,12 @@
 
 void board_init(void)
 {    /* initialize the boards LEDs */
-    gpio_init(LED_RED_PIN, GPIO_OUT);  /* PA3 */
-    gpio_init(LED_GREEN_PIN, GPIO_OUT);  /* PA0 */
+    gpio_init(LED_RED_PIN, LED_RED_MODE);  /* PA3 */
+    gpio_init(LED_GREEN_PIN, LED_GREEN_MODE);  /* PA0 */
 
-    gpio_init(LIGHT_SENSOR_SUPPLY_PIN, GPIO_OUT);  /* PB6 */
+    gpio_init(LIGHT_SENSOR_SUPPLY_PIN, LIGHT_SENSOR_SUPPLY_MODE);  /* PB6 */
 
-    gpio_init(BTN0_PIN, GPIO_IN_PD);  /* PB3 */
+    gpio_init(BTN0_PIN, BTN0_MODE);  /* PB3 */
 
 #ifdef TODO
 #error TODO gpio_init for SPEAKER_PWM_PIN

@@ -27,12 +27,12 @@ extern "C" {
 
 //#ifdef TODO
 //#error To be implemented
-/* This board provides a LSE, marked as X1 on the board */
+/* This board provides a LSE, marked as X1 (32.768 KHz) on the board */
 #ifndef CONFIG_BOARD_HAS_LSE
 #define CONFIG_BOARD_HAS_LSE 1
 #endif
 
-/* This board provides a HSE, marked as X2 on the board */
+/* This board provides a HSE, marked as X2 (16 MHz) on the board */
 #ifndef CONFIG_BOARD_HAS_HSE
 #define CONFIG_BOARD_HAS_HSE 1
 #endif
