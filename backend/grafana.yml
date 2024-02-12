@@ -15,6 +15,7 @@ services:
       VIRTUAL_PORT: 3000
       VIRTUAL_PATH: grafana
     volumes:
+#      - ./data/grafana:/var/lib/grafana:rw
        - ./configuration/grafana/provisioning:/etc/grafana/provisioning/
        - ./configuration/grafana/logo.svg:/usr/share/grafana/public/img/grafana_icon.svg
     ports:
