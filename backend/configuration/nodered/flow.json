@@ -482,7 +482,7 @@
         "type": "mqtt in",
         "z": "176e4c9f.1fe43b",
         "name": "Application Rx Wyres I2HM Yaoudé",
-        "topic": "application/281/devices/+/rx",
+        "topic": "application/281/device/+/rx",
         "qos": "2",
         "datatype": "auto",
         "broker": "475864c9.5c678c",
