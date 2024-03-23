@@ -41,6 +41,9 @@ QUIET ?= 1
 #CFLAGS += -DENABLE_DEBUG=1
 CFLAGS += -DDEBUG_ASSERT_VERBOSE=1
 
+# Fix the problem of the size of the debugging files
+CFLAGS_DBG = 
+
 ifdef MAKEFILE_DEVICE
 include $(MAKEFILE_DEVICE)
 else
@@ -59,9 +62,9 @@ ifeq ($(BOARD),wyres-base)
 # Default radio driver is Semtech SX1272 (used by the IMST iM880ab boards)
 DRIVER ?= sx1272
 FEATURES_REQUIRED += periph_rtc
-
-# TODO add board sensors
-
+# builtin board sensors
+LPS22HB = 1
+#USEMODULE += lis2dh12_i2c
 endif
 
 ifeq ($(BOARD),im880b)
@@ -70,18 +73,6 @@ BOARD = im880b
 # Default radio driver is Semtech SX1272 (used by the IMST iM880ab boards)
 DRIVER ?= sx1272
 FEATURES_REQUIRED += periph_rtc
-
-ifeq ($(MODEL),semtech-demomote)
-GPS ?= 1
-USEMODULE += mma8x5x
-USEMODULE += mag3110
-USEMODULE += mpl3115a2
-# USEMODULE += sx9500 # TO BE IMPLEMENTED
-else
-DS75LX ?= 1
-GPS ?= 0
-endif
-endif
 
 ifeq ($(MODEL),semtech-demomote)
 BOARD = im880b
@@ -106,16 +97,6 @@ DS75LX ?= 0
 GPS ?= 0
 DRIVER ?= sx1276
 endif
-
-
-
-ifeq ($(BOARD),wyres-base)
-EXTERNAL_BOARD_DIRS ?= ../../../campusiot/idosens/boards
-# Builtin sensors
-AT30TES75X ?= 1
-DRIVER ?= sx1276
-endif
-
 
 # IdoSens boards are into git@github.com:CampusIoT/idosens.git
 
@@ -153,6 +134,12 @@ endif
 
 # Sensors
 
+ifeq ($(LPS22HB),1)
+USEMODULE += lps22hb
+CFLAGS += -DLPS22HB=1
+endif
+
+
 ifeq ($(DS75LX),1)
 USEMODULE += ds75lx
 CFLAGS += -DDS75LX=1
@@ -183,6 +170,9 @@ FEATURES_REQUIRED += periph_wdt
 
 USEMODULE += fmt
 USEMODULE += xtimer
+USEMODULE += ztimer
+USEMODULE += ztimer_sec 
+USEMODULE += ztimer_msec
 
 USEMODULE += random
 USEMODULE += prng_sha1prng

@@ -18,6 +18,26 @@
 
 #include <random.h>
 
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+#endif
+
+/**
+ * @See https://github.com/Lora-net/LoRaMac-node/blob/master/src/mac/LoRaMacTypes.h#L335
+*/
+static const uint8_t _pwd_dbm_to_id[] = {
+    0, 0,
+    0 /* 2 dBm */, 0,
+    1 /* 4 dBm */, 1,
+    2 /* 6 dBm */, 2,
+    3 /* 8 dBm */, 3,
+    4 /* 10 dBm */, 4,
+    5 /* 12 dBm */, 5,
+    6 /* 14 dBm */
+};
+
+
+
 
 // Count the number of elements in an array.
 //#define CNT(array) (uint8_t)(sizeof(array) / sizeof(*array))
@@ -70,6 +90,7 @@ void benchmark_start(semtech_loramac_t *loramac, struct benchmark_t benchmark, u
         uint8_t size;
 
         DEBUG("[ftd] New benchmark sequence: port=%d\n", port);
+        app_clock_print_rtc();
 
         for( i=0 ; i < benchmark.drpwsz_sequence_nb  ; i++) {
 
@@ -100,7 +121,12 @@ void benchmark_start(semtech_loramac_t *loramac, struct benchmark_t benchmark, u
         	}
 
             semtech_loramac_set_tx_port(loramac, port);
-            semtech_loramac_set_tx_power(loramac, power);
+
+            if(power < ARRAY_SIZE(_pwd_dbm_to_id)){
+                semtech_loramac_set_tx_power(loramac, _pwd_dbm_to_id[power]);
+            } else {
+                semtech_loramac_set_tx_power(loramac, 6); // 14 dBm
+            }
 
             semtech_loramac_set_devaddr(loramac, (uint8_t*)&devaddr);
 

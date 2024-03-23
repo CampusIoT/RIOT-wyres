@@ -15,7 +15,8 @@
 
 #include <string.h>
 
-#include "xtimer.h"
+#include "ztimer.h"
+#include "xtimer.h" // TODO remove since deprecated
 #include <time.h>
 
 #include "mutex.h"
@@ -40,6 +41,11 @@
 #if DS75LX == 1
 #include "ds75lx.h"
 #include "ds75lx_params.h"
+#endif
+
+#if MODULE_LPS22HB == 1
+#include "lpsxxx.h"
+#include "lpsxxx_params.h"
 #endif
 
 #if AT30TES75X == 1
@@ -79,6 +85,10 @@ extern semtech_loramac_t loramac;
 ds75lx_t ds75lx;
 #endif
 
+#if MODULE_LPS22HB == 1
+lpsxxx_t lps22hb_dev;
+#endif
+
 #if MODULE_AT30TES75X == 1
 at30tse75x_t at30tse75x;
 #endif
@@ -94,6 +104,9 @@ static mma8x5x_t mma8x5x;
 #if MODULE_MPL3115A2 == 1
 static mpl3115a2_t mpl3115a2;
 #endif
+
+// TODO add lis2dh12_i2c for board wyres-base
+
 
 // Count the number of elements in an array.
 #define CNT(array) (uint8_t)(sizeof(array) / sizeof(*array))
@@ -173,6 +186,16 @@ static void init_sensors(void){
     }
 #endif
 
+#if MODULE_LPS22HB == 1
+    DEBUG("[lps22hb] LPS22HB sensor is enabled\n");
+
+    result = lpsxxx_init(&lps22hb_dev, &lpsxxx_params[0]);
+    if (result != LPSXXX_OK) {
+        DEBUG("[error] Failed to initialize LPS22HB sensor\n");
+        port = PORT_UP_ERROR;
+    }
+#endif
+
 #if MODULE_AT30TES75X == 1
     DEBUG("[at30tse75x] AT30TES75X sensor is enabled\n");
 
@@ -218,7 +241,6 @@ static void init_sensors(void){
 	}
 #endif
 
-
     semtech_loramac_set_tx_port(&loramac, port);
 }
 
@@ -229,7 +251,8 @@ unsigned int encode_sensors(uint8_t *payload, const unsigned int len) {
 		return 0;
 	}
 
-	int16_t temperature = 0;
+	int16_t temperature = INT16_MAX;
+	uint16_t pressure = UINT16_MAX;
 
 #if MODULE_DS75LX == 1
 	{
@@ -241,6 +264,24 @@ unsigned int encode_sensors(uint8_t *payload, const unsigned int len) {
     DEBUG("[ds75lx] get temperature : temperature=%d\n",temperature);
 	}
 #endif
+
+#if MODULE_LPS22HB == 1
+	{
+        /* measure temperature */
+        lpsxxx_enable(&lps22hb_dev);
+        ztimer_sleep(ZTIMER_SEC, 1); /* wait a bit for the measurements to complete */
+        /* Get temperature in degrees celsius */
+        uint16_t _pres;
+        int16_t _temp;
+        lpsxxx_read_temp(&lps22hb_dev, &_temp);
+        temperature = _temp / 100;
+        lpsxxx_read_pres(&lps22hb_dev, &_pres);
+        pressure = _pres;
+        lpsxxx_disable(&lps22hb_dev);
+        DEBUG("[lps22hb] get temperature=%d pressure=%d\n", temperature, pressure);
+	}
+#endif
+
 
 #if MODULE_AT30TES75X == 1
     {
@@ -261,6 +302,10 @@ unsigned int encode_sensors(uint8_t *payload, const unsigned int len) {
 	payload[i++] = (temperature >> 8) & 0xFF;
 	payload[i++] = (temperature >> 0) & 0xFF;
 
+	payload[i++] = (pressure >> 8) & 0xFF;
+	payload[i++] = (pressure >> 0) & 0xFF;
+
+    // TODO check test on len
 	if(len < i + (3*4)) {
 		return i;
 	}
@@ -308,11 +353,11 @@ unsigned int encode_sensors(uint8_t *payload, const unsigned int len) {
                (unsigned int)pressure, temperature/10, abs(temperature%10), status);
     }
 
-	payload[i++] = (pressure >> 24) & 0xFF;
-	payload[i++] = (pressure >> 16) & 0xFF;
-
 	payload[i++] = (temperature >> 8) & 0xFF;
 	payload[i++] = (temperature >> 0) & 0xFF;
+
+	payload[i++] = (pressure >> 24) & 0xFF;
+	payload[i++] = (pressure >> 16) & 0xFF;
 
 	payload[i++] = (status) & 0xFF;
 
