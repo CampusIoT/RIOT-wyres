@@ -96,5 +96,12 @@ function Decoder(bytes, port) {
     return Decode(port, bytes);
 }
 
-// TODO TTN v3
+// For TTNv3 and Chirpstack v4
+function decodeUplink(input) {
 
+  return {
+    data: Decode(input.fPort, input.bytes, null),
+    warnings: [],
+    errors: []
+  };
+}
