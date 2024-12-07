@@ -26,6 +26,7 @@ L'objectif de ce tutoriel est
 * [Intelligence artificielle embarquée (TinyML)](11.md)
 * [La programmation ultra basse comsommation](12.md)
 * [Contributions](20.md)
+* [Ariel OS (rust for embedded MCU)](30.md)
 
 ## Liens utiles
 * [Cours sur RIOT OS en anglais](https://github.com/RIOT-OS/riot-course)
