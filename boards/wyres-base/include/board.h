@@ -94,9 +94,9 @@ extern "C" {
  * @name Light sensor supply
  * @{
  */
-#define LIGHT_SENSOR_SUPPLY_PIN            GPIO_PIN(PORT_A,3)
-#define LIGHT_SENSOR_SUPPLY_PORT           GPIOA
-#define LIGHT_SENSOR_SUPPLY_MASK           (1 << 3)
+#define LIGHT_SENSOR_SUPPLY_PIN            GPIO_PIN(PORT_B,6)
+#define LIGHT_SENSOR_SUPPLY_PORT           GPIOB
+#define LIGHT_SENSOR_SUPPLY_MASK           (1 << 6)
 #define LIGHT_SENSOR_SUPPLY_MODE           GPIO_OUT
 
 #define LIGHT_SENSOR_SUPPLY_ON             (LIGHT_SENSOR_SUPPLY_PORT->BSRR |= LIGHT_SENSOR_SUPPLY_MASK)

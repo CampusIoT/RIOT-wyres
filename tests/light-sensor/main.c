@@ -13,6 +13,7 @@
 #include "xtimer.h"
 #include "periph/adc.h"
 #include "periph/gpio.h"
+#include <stdio.h>
 
 #define ADC_IN_USE 			ADC_LINE(0)
 #define ADC_RES				ADC_RES_12BIT
