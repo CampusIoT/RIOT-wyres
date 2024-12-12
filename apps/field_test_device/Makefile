@@ -73,6 +73,7 @@ BOARD = im880b
 # Default radio driver is Semtech SX1272 (used by the IMST iM880ab boards)
 DRIVER ?= sx1272
 FEATURES_REQUIRED += periph_rtc
+endif
 
 ifeq ($(MODEL),semtech-demomote)
 BOARD = im880b
