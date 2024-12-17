@@ -11,11 +11,25 @@ all:
 	$(info $$MAKEFILE_DEVICE is ${MAKEFILE_DEVICE})
 	$(info $$OPERATOR is ${OPERATOR})
 	$(info $$DRIVER is ${DRIVER})
-	$(info $$REGION is ${REGION})
+	$(info $$OTAA is ${OTAA})
+	$(info $$DEVEUI is ${DEVEUI})
+	$(info $$APPEUI is ${APPEUI})
+	$(info $$APPKEY is ${APPKEY})
+	$(info $$DEVADDR is ${DEVADDR})
+	$(info $$NWKSKEY is ${NWKSKEY})
+	$(info $$APPSKEY is ${APPSKEY})
 	$(info $$DS75LX is ${DS75LX})
 	$(info $$LM75 is ${LM75})
 	$(info $$AT30TES75X is ${AT30TES75X})
 	$(info $$GPS is ${GPS})
+
+
+
+APPEUI ?= 0000000000000000
+APPKEY ?= 00000000000000000000000000000000
+DEVADDR ?= FF000000
+NWKSKEY ?= 00000000000000000000000000000000
+APPSKEY ?= 00000000000000000000000000000000
 
 # External modules
 EXTERNAL_MODULE_DIRS += ../../modules
@@ -68,11 +82,11 @@ LPS22HB = 1
 endif
 
 ifeq ($(BOARD),im880b)
-
 BOARD = im880b
 # Default radio driver is Semtech SX1272 (used by the IMST iM880ab boards)
 DRIVER ?= sx1272
 FEATURES_REQUIRED += periph_rtc
+endif
 
 ifeq ($(MODEL),semtech-demomote)
 BOARD = im880b
@@ -129,7 +143,6 @@ BOARD = lora-e5-dev
 GPS ?= 0
 DRIVER ?= sx126x_stm32wl
 endif
-
 
 
 # Sensors
