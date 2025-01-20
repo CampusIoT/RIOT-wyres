@@ -10,6 +10,11 @@ This repository contains the firmware implementation with [RIOT OS](https://gith
 ![SWD connector](boards/wyres-base/wyres-base-swd.jpg)
 ![wyres_base](docs/wyres_base.jpg)
 ![wyres_proto](docs/wyres_proto.jpg)
+![wyres_proto](docs/wyres_proto.jpg)
+![grafana](tutoriel/images/grafana-dashboard-wyres.jpg)
+![grafana](tutoriel/images/devboards.jpg)
+![grafana](tutoriel/images/wyres-setup-dev.jpg)
+
 
 ## Getting started
 
