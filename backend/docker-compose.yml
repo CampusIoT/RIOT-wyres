@@ -1,5 +1,5 @@
 # Copyright (C) UGA GINP  - All Rights Reserved
-# Written by Didier DONSEZ, 2016-2023
+# Written by Didier DONSEZ, 2016-2025
 
 version: "2"
 
@@ -11,7 +11,7 @@ services:
       service: nodered
     links:
       - influxdb:influxdb
-      - thingsboard:thingsboard
+#      - thingsboard:thingsboard
 
   influxdb:
     extends:
@@ -25,7 +25,7 @@ services:
     links:
       - influxdb:influxdb
 
-  thingsboard:
-    extends:
-      file: thingsboard.yml
-      service: thingsboard
+#  thingsboard:
+#    extends:
+#      file: thingsboard.yml
+#      service: thingsboard
