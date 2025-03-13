@@ -537,23 +537,19 @@ int init_sx1272_cmd(int argc, char **argv)
 
 	    netdev->driver = &sx127x_driver;
 
-        puts("1");
-        printf("%8x\n", (unsigned int)netdev->driver);
-        printf("%8x\n", (unsigned int)netdev->driver->init);
+        netdev->event_callback = _event_cb;
+
+//        printf("%8x\n", (unsigned int)netdev->driver);
+//        printf("%8x\n", (unsigned int)netdev->driver->init);
 
 	    if (netdev->driver->init(netdev) < 0) {
 	        puts("Failed to initialize SX127x device, exiting");
 	        return 1;
 	    }
-        puts("2");
-
-	    netdev->event_callback = _event_cb;
-        puts("3");
 
 	    _recv_pid = thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN - 1,
 	                              THREAD_CREATE_STACKTEST, _recv_thread, NULL,
 	                              "recv_thread");
-        puts("4");
 
 	    if (_recv_pid <= KERNEL_PID_UNDEF) {
 	        puts("Creation of receiver thread failed");

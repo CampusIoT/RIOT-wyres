@@ -1,15 +1,4 @@
 
-# Chap 01 
-
-
-> à prendre en main au lieu de à prendre en moins
-
-Cependant, dans le cadre de ce tutoriel, Visual Code Studio sera plus facile et rapide à prendre en moin. 
-
-
-
-
-
 
 
 # Chap 03
@@ -78,20 +67,12 @@ LED/DEL
 Normal ? 
 
 
-External I/O , lien mort :  [LIS2DE12](https://github.com/RIOT-OS/RIOT/tree/master/tests/driver_lis2dh12)
-
+External I/O
 
 Capteur analogique de luminosité
 
 > Je n'arrive pas à éblouir la LED avec la lumière de téléphone le pourcentage n'augmente pas.
 
-
-Module GNSS
-
-> pétite coquille, en gras ce qui cloche, il faut mettre interface.
-
-
-Cependant, comme la carte Wyres ne possède qu'une seule **inerface** 
 
 
 # Chap 05 
@@ -143,53 +124,9 @@ static int _init(netdev_t *netdev)
 }
 ```
 
-
 # Chap 07
 Dans la console ChirpStack (https://lns.campusiot.imag.fr/#/organizations/47/device-profiles): 
 > OTAA_CLASS_A_TEXT n'est pas défini dans Device-profiles
-
-
-
-# Chapitre 8A 
-
-> Il faut rajouter l'etape de la construction de l'image nodered
-```
-docker compose build nodered
-
-```
-> Car sinon le pull échoue
-
-```
-
-➜  backend git:(main) ✗ docker compose pull
-[+] Pulling 4/4
- ✔ grafana Pulled                                                        1.2s 
- ✔ thingsboard Pulled                                                    1.2s 
- ! nodered Warning                                                       1.4s 
- ✔ influxdb Pulled                                                       1.2s 
-WARNING: Some service image(s) must be built from source by running:
-    docker compose build nodered
-1 error occurred:
-	* Error response from daemon: pull access denied for iot-dashboard/nodered, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
-
-
-```
-# Chap 10 
-
-Hachage
-
-> Compilation echouée
-
-```bash
-cd ~/github/RIOT-OS/RIOT/tests/unittests/tests-hashes
-make -j 4 flash
-
-
-Makefile:1: /Makefile.base: Aucun fichier ou dossier de ce nom
-make: *** Aucune règle pour fabriquer la cible « /Makefile.base ». Arrêt
-
-```
-
 
 
 # Chap 11 
