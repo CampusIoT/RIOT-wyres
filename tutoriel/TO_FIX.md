@@ -21,28 +21,6 @@ Les threads permettent de réaliser plusieurs tâches en parellele par le progra
 RIOT offre de mécanismes de barrière de concurrence entre les threads (mutex par exemple) et des moyens de communication par message.
 
 
-> je mets en gras ce qui cloche
-
-La commande ps du Shell permet de lister les threads **courantes** dans le programme. 
-main correspond à la fonction main() qui exécute le Shell et isr_stack 
-correspond à la thread qui exécute les traitants des interuptions, timers ... 
-Il faut **fréquent** ajuster la taille de la pile de isr_stack avec 
-CFLAGS += -DISR_STACKSIZE=2048 par exemple. Idem pour main avec THREAD_STACKSIZE_MAIN.
-
-> On peur re-écrire comme ça ? 
-La commande ps du Shell permet de lister les threads actives dans le programme. 
-main correspond à la fonction main() qui exécute le Shell, et isr_stack correspond 
-au thread qui gère les traitements des interruptions, timers, etc. 
-Il est souvent nécessaire d'ajuster la taille de la pile de isr_stack avec 
-CFLAGS += -DISR_STACKSIZE=2048, par exemple. 
-De même pour main, cela se fait avec THREAD_STACKSIZE_MAIN.
-
-> en gras ce qui manque
-
-L'EEPROM est une (petite) mémoire persistante qui est en général utilisé pour des paramêtres de personnalisation ou de configuration de l'équipement.
-
-
-
 # Tension de l'alimentation
 
 > Problème de compilation 
