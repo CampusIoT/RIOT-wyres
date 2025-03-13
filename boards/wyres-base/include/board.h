@@ -66,6 +66,32 @@ extern "C" {
 
 /** @} */
 
+/**
+ * @name Macros for controlling the VCC I2C
+ * @{
+ */
+#define VCC_I2C_PIN            	GPIO_PIN(PORT_A,12)
+#define VCC_I2C_PORT           	GPIOA
+#define VCC_I2C_MASK           	(1 << 12)
+#define VCC_I2C_MODE           	GPIO_OUT
+
+#define VCC_I2C_ON             	(VCC_I2C_PORT->BSRR |= VCC_I2C_MASK)
+#define VCC_I2C_OFF            	(VCC_I2C_PORT->BSRR |= VCC_I2C_MASK<<16)
+#define VCC_I2C_TOGGLE         	(VCC_I2C_PORT->ODR  ^= VCC_I2C_MASK)
+
+/**
+ * @name Macros for controlling the VCC UART
+ * @{
+ */
+#define VCC_UART_PIN            	GPIO_PIN(PORT_A,11)
+#define VCC_UART_PORT           	GPIOA
+#define VCC_UART_MASK           	(1 << 11)
+#define VCC_UART_MODE           	GPIO_OUT
+
+#define VCC_UART_ON             	(VCC_UART_PORT->BSRR |= VCC_UART_MASK)
+#define VCC_UART_OFF            	(VCC_UART_PORT->BSRR |= VCC_UART_MASK<<16)
+#define VCC_UART_TOGGLE         	(VCC_UART_PORT->ODR  ^= VCC_UART_MASK)
+
 
 /**
  * @name Macros for controlling the on-board LEDs.

@@ -19,8 +19,21 @@
 #include "board.h"
 #include "periph/gpio.h"
 
-void board_init(void)
-{    /* initialize the boards LEDs */
+void board_init(void) 
+{
+    /* initialize the VCC of Grove connectors  */
+    gpio_init(VCC_UART_PIN, VCC_UART_MODE);  /* PA11 */
+    gpio_init(VCC_I2C_PIN, VCC_I2C_MODE);  /* PA12 */
+
+#ifdef LOW_POWER_MODE
+    VCC_UART_OFF;
+    VCC_I2C_OFF;
+#else
+    VCC_UART_ON;
+    VCC_I2C_ON;
+#endif
+
+    /* initialize the on boards LEDs */
     gpio_init(LED_RED_PIN, LED_RED_MODE);  /* PA3 */
     gpio_init(LED_GREEN_PIN, LED_GREEN_MODE);  /* PA0 */
 
