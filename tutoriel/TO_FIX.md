@@ -12,14 +12,6 @@ There are unsatisfied feature requirements: periph_vbat
 /home/labs/github/RIOT-OS/RIOT/tests/periph/vbat/../../../Makefile.include:1026: *** You can let the build continue on expected errors by setting CONTINUE_ON_EXPECTED_ERRORS=1 to the command line. Arrêt.
 
 ```
-Pétites coquilles 
-
-> parallèle au lieu de parellele
-> offre des mécanismes 
-
-Les threads permettent de réaliser plusieurs tâches en parellele par le programme. 
-RIOT offre de mécanismes de barrière de concurrence entre les threads (mutex par exemple) et des moyens de communication par message.
-
 
 # Tension de l'alimentation
 
