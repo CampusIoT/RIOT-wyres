@@ -198,7 +198,9 @@ int main(void)
                   THREAD_PRIORITY_MAIN - 1, 0, _wait_recv, NULL, "recv thread");
 #endif
 
-    puts("All up, running the shell now");
+    puts("--- LoRaWAN Test ---");
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
+
 }
+
