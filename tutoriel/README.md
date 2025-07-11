@@ -36,5 +36,6 @@ L'objectif de ce tutoriel est
 Ce tutoriel a été réalisé avec le soutien
 * de l'institut [MIAI](https://miai.univ-grenoble-alpes.fr/),
 * du labex [Persyval Lab](https://persyval-lab.org/),
+* de l'Equipex [Terra Forma](https://terra-forma-web.osug.fr/),
 * du laboratoire [LIG](https://www.liglab.fr/),
 * et du fablab [FabMASTIC](https://fabmstic.imag.fr/)
