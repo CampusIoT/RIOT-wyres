@@ -28,6 +28,7 @@
 
 #include "thread.h"
 #include "shell.h"
+
 //#include "shell_commands.h"
 
 #include "net/netdev.h"
@@ -42,6 +43,15 @@
 
 #include "fmt.h"
 
+#include "meshtastic_utils.h"
+
+#include "pb_decode.h"
+#include "meshtastic/mesh.pb.h"
+#include "meshtastic/portnums.pb.h"
+//#include "meshtastic/position.pb.h"
+#include "meshtastic/telemetry.pb.h"
+//#include "meshtastic/nodeinfo.pb.h"
+
 #define SX127X_LORA_MSG_QUEUE   (16U)
 #ifndef SX127X_STACKSIZE
 #define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
@@ -52,7 +62,7 @@
 static char stack[SX127X_STACKSIZE];
 static kernel_pid_t _recv_pid;
 
-static char message[32];
+static char message[200];
 static sx127x_t sx127x;
 
 int lora_setup_cmd(int argc, char **argv)
@@ -455,7 +465,15 @@ int payload_cmd(int argc, char **argv)
     return 0;
 }
 
-
+static void print_hex(const uint8_t *buf, size_t len)
+{
+    for (size_t i = 0; i < len; i++) {
+        printf("%02X", buf[i]);
+        if (i + 1 < len) {
+            printf(" ");
+        }
+    }
+}
 
 static void _event_cb(netdev_t *dev, netdev_event_t event)
 {
@@ -480,11 +498,73 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
         case NETDEV_EVENT_RX_COMPLETE:
             len = dev->driver->recv(dev, NULL, 0, 0);
             dev->driver->recv(dev, message, len, &packet_info);
-            printf(
-                "{Payload: \"%s\" (%d bytes), RSSI: %i, SNR: %i, TOA: %" PRIu32 "}\n",
-                message, (int)len,
-                packet_info.rssi, (int)packet_info.snr,
+            printf("{Payload: ");
+            print_hex((uint8_t*) message, len);
+            printf(" (%d bytes), RSSI: %i, SNR: %i, TOA: %" PRIu32 "}\n",
+                (int)len,
+                packet_info.rssi,
+                (int)packet_info.snr,
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
+            
+            meshtastic_printf((uint8_t*) message, len);
+            uint8_t pb_payload [200];
+            uint8_t pb_payload_size;
+            meshtastic_get_pb_payload((uint8_t*) message, len, pb_payload, &pb_payload_size);
+            print_hex(pb_payload, pb_payload_size);
+            
+            meshtastic_MeshPacket packet = meshtastic_MeshPacket_init_zero;
+            pb_istream_t stream = pb_istream_from_buffer(pb_payload, pb_payload_size);  
+
+            if (!pb_decode(&stream, meshtastic_MeshPacket_fields, &packet)) {
+                printf("PB decode failed: %s\n", PB_GET_ERROR(&stream));
+                //return;
+            }
+            if (packet.which_payload_variant != meshtastic_MeshPacket_decoded_tag) {
+                printf("Payload variant error:\n");
+                //return;
+            }
+
+            meshtastic_Data *data = &packet.decoded;
+            switch (data->portnum) {
+
+                case meshtastic_PortNum_TEXT_MESSAGE_APP:
+                    printf("Text message: %.*s\n",
+                    data->payload.size,
+                    data->payload.bytes);
+                break;
+
+                case meshtastic_PortNum_POSITION_APP: {
+                    meshtastic_Position pos = meshtastic_Position_init_zero;
+                    pb_istream_t s = pb_istream_from_buffer(
+                    data->payload.bytes,
+                    data->payload.size);
+
+                    if (pb_decode(&s, meshtastic_Position_fields, &pos)) {
+                        printf("Lat: %ld Lon: %ld Alt: %ld\n",
+                        pos.latitude_i,
+                        pos.longitude_i,
+                        pos.altitude);
+                    }
+                break;
+                }
+
+                case meshtastic_PortNum_TELEMETRY_APP: {
+                meshtastic_Telemetry tel = meshtastic_Telemetry_init_zero;
+                pb_istream_t s = pb_istream_from_buffer(
+                    data->payload.bytes,
+                    data->payload.size);
+
+                    if (pb_decode(&s, meshtastic_Telemetry_fields, &tel)) {
+                    printf("Battery: %ld%%\n", tel.variant.device_metrics.battery_level);
+                }
+                    break;
+                }
+
+            default:
+            printf("Unsupported portnum: %d\n", data->portnum);
+            break;
+            }
+       
             break;
 
         case NETDEV_EVENT_TX_COMPLETE:

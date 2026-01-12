@@ -3,7 +3,8 @@ APPLICATION = test-driver-sx127x
 
 # This has to be the absolute path to the RIOT base directory:
 #RIOTBASE ?= ../../../../RIOT-OS/RIOT
-RIOTBASE ?= ${HOME}/github/RIOT-OS/RIOT
+#RIOTBASE ?= ${HOME}/github/RIOT-OS/RIOT
+RIOTBASE ?= ${HOME}/Documents/RIOT
 
 # Path to my boards
 EXTERNAL_BOARD_DIRS ?= ../../boards
@@ -19,6 +20,8 @@ USEMODULE += shell_cmds_default
 #USEMODULE += shell_commands
 USEMODULE += fmt
 
+USEPKG += nanopb
+
 DRIVER ?= sx1272
 # use SX1276 by default
 USEMODULE += $(DRIVER)
@@ -28,6 +31,12 @@ CFLAGS_DBG =
 
 CFLAGS += -DISR_STACKSIZE=1024U
 #CFLAGS += -DSX127X_STACKSIZE=1024U
+
+SRC += main.c
+SRC += meshtastic_utils.c 
+SRC += $(CURDIR)/meshtastic/mesh.pb.c
+SRC += $(CURDIR)/meshtastic/telemetry.pb.c
+
 
 
 include $(RIOTBASE)/Makefile.include
