@@ -4,43 +4,34 @@
  * Firmware: https://github.com/CampusIoT/orbimote/tree/master/field_test_device
  */
 
-function readUInt16BE(buf, offset) {
-    offset = offset >>> 0;
-    return (buf[offset] << 8) | buf[offset + 1];
+// See https://github.com/CampusIoT/payload-codec/blob/master/src/main/ttn_chirpstack/buf.js
+
+function readUInt16BE (buf, offset) {
+  offset = offset >>> 0;
+  return (buf[offset] << 8) | buf[offset + 1];
 }
 
-function readUInt32BE(buf, offset) {
-    offset = offset >>> 0;
+function readUInt32BE (buf, offset) {
+  offset = offset >>> 0;
 
-    return (buf[offset] * 0x1000000) +
-        ((buf[offset + 1] << 16) |
-            (buf[offset + 2] << 8) |
-            buf[offset + 3]);
+  return (buf[offset] * 0x1000000) +
+    ((buf[offset + 1] << 16) |
+    (buf[offset + 2] << 8) |
+    buf[offset + 3]);
 }
 
-function readInt32BE(buf, offset, byteLength) {
-    offset = offset >>> 0;
-    byteLength = byteLength >>> 0;
-
-    var i = byteLength;
-    var mul = 1;
-    var val = buf[offset + --i];
-    while (i > 0 && (mul *= 0x100)) {
-        val += buf[offset + --i] * mul;
-    }
-    mul *= 0x80;
-
-    if (val >= mul) val -= Math.pow(2, 8 * byteLength);
-
-    return val;
+function readInt16BE (buf, offset) {
+  offset = offset >>> 0;
+  var val = buf[offset + 1] | (buf[offset] << 8);
+  return (val & 0x8000) ? val | 0xFFFF0000 : val;
 }
 
-function readUInt8(buf, offset) {
-    offset = offset >>> 0;
-    return (buf[offset]);
+function readUInt8 (buf, offset) {
+  offset = offset >>> 0;
+  return (buf[offset]);
 }
 
-// Chirpstack
+// For Chirpstack
 // Decode decodes an array of bytes into an object.
 //  - fPort contains the LoRaWAN fPort number
 //  - bytes is an array of bytes, e.g. [225, 230, 255, 0]
@@ -48,47 +39,59 @@ function readUInt8(buf, offset) {
 // The function must return an object, e.g. {"temperature": 22.5}
 function Decode(fPort, bytes, variables) {
 
-    var o = {};
+  var o = {};
 
-    if (fPort === 202) {
-        // TODO
-    } else {
-        var size = bytes.length;
-        o.size = size;
+  if(fPort === 202) {
+    // TODO
+  } else {
+    var size = bytes.length;
+    o.size = size;
 
-        if (size < 2) { return o; }
+    o.benchmark_id = fPort;
 
-        // Extract LoRa settings.
-        o.txpower = readUInt8(bytes, 0);
-        o.dataRate = readUInt8(bytes, 1);
-        o.gain = (5 - o.dataRate) * 2 + ((o.txpower - 2) * 2 / 3.0);
+    var idx = 0;
+    
+    if(idx+2 > size) { return o; }
+	// Extract LoRa settings.
+	o.txpower = readUInt8(bytes,idx++);
+	o.dataRate   = readUInt8(bytes,idx++);
+    
+    if(idx+2 > size) { return o; }
+	// Extract temperature.
+	o.temperature = readInt16BE(bytes,idx);
+	idx+=2;
+    
+    if(idx+2 > size) { return o; }
+	// Extract pressure.
+	o.pressure = readUInt16BE(bytes,idx);
+	idx+=2;
 
-        if (size < 4) { return o; }
-        // Extract temperature.
-        o.temperature = readUInt16BE(bytes, 2) / 100.0;
+    if(idx+8 > size) { return o; }
+     
+    // 3 bytes for latitude (int24), 3 bytes for longitude (int24), 2 bytes for altitude (in meter)
+    
+    // Value used for the conversion of the position from DMS to decimal.
+	var MaxNorthPosition = 8388607; // 2^23 - 1
+	var MaxEastPosition  = 8388607; // 2^23 - 1
 
-        if (size < 12) { return o; }
+	// Extract latitude.
+	var Latitude = (readUInt32BE(bytes,idx) >> 8) & 0x7FFF;
+	Latitude = Latitude * 90 / MaxNorthPosition;
+	o.latitude = Math.round(Latitude * 1000000) / 1000000;
+	idx+=3;
 
-        // Value used for the conversion of the position from DMS to decimal.
-        var MaxNorthPosition = 8388607; // 2^23 - 1
-        var MaxEastPosition = 8388607; // 2^23 - 1
+	// Extract longitude.
+	var Longitude = (readUInt32BE(bytes,idx) >> 8);
+	Longitude = Longitude * 180 / MaxEastPosition;
+	o.longitude = Math.round(Longitude * 1000000) / 1000000;
+	idx+=3;
 
-        var Latitude = (readInt32BE(bytes, 4) >> 8);
-        var Longitude = (readInt32BE(bytes, 7) >> 8);
-        if (!((Latitude === 0) && (Longitude === 0))) {
-            // Extract latitude.
-            Latitude = Latitude * 90 / MaxNorthPosition;
-            o.latitude = Math.round(Latitude * 1000000) / 1000000;
+	// Extract altitude.
+	o.altitude = readUInt16BE(bytes,idx);
+    idx+=2;
 
-            // Extract longitude.
-            Longitude = Longitude * 180 / MaxEastPosition;
-            o.longitude = Math.round(Longitude * 1000000) / 1000000;
-
-            // Extract altitude.
-            o.altitude = readUInt16BE(bytes, 10);
-        }
-    }
-    return o;
+  }
+  return o;
 }
 
 // For Helium and TTNv2
