@@ -1,0 +1,134 @@
+/*
+ * Message definition for SimpleMesh LoRa protocol
+ * Author: Didier DONSEZ
+ */
+
+syntax = "proto3";
+import "nanopb.proto";
+
+package simple_mesh;
+
+/**
+ * @brief Advert Payload
+ */
+message Advert
+{
+    /**
+	 * @brief EC Public Key
+	 */
+	bytes from  				                = 1; [(nanopb).max_size = 32, (nanopb).fixed_length = true]
+
+	string name  				                = 2; [(nanopb).max_length = 4]
+
+	string long_name  				            = 3; [(nanopb).max_length = 32]
+
+	optional string owner  				        = 4; [(nanopb).max_length = 32]
+
+	optional float latitude  				    = 5;
+
+	optional float longitude  				    = 6;
+
+	optional uint32 altitude  				    = 7;
+}
+
+/**
+ * @brief Ping Payload
+ */
+message Ping
+{
+}
+
+/**
+ * @brief Ping Payload
+ */
+message Pong
+{
+	uint32 fcnt_ping  		            = 1;
+    int32  lsnr  				        = 2; // should be devided by 10.0
+    int32  rssi 				        = 3;
+}
+
+/**
+ * @brief Text Payload (Channel or Direct)
+ */
+message Text
+{
+	string msg  				       = 1; [(nanopb).max_length = 200]
+    // in case of reply
+    optional fixed32 to  			   = 3; // address of the reply
+    optional uint32 fcnt  			   = 4; // frame counter of the message to reply
+    optional int32  lsnr  			   = 5; // should be devided by 10.0
+}
+
+/**
+ * @brief Compressed Text Payload (Channel or Direct)
+ * compressed message with Unishox2 https://github.com/siara-cc/Unishox2
+ */
+message CompressedText
+{
+	bytes cmsg  				       = 1; [(nanopb).max_size = 200]
+    // in case of reply
+    optional fixed32 to  			   = 3; // address of the reply
+    optional uint32 fcnt  			   = 4; // frame counter of the message to reply
+    optional int32  lsnr  			   = 5; // should be devided by 10.0
+}
+
+
+/**
+ * @brief Message
+ */
+message SimpleMeshMessage
+{
+	/**
+	 * @brief From address
+	 */
+	fixed32 from  				        = 1;
+
+    /**
+	 * @brief To address (for direct message)
+	 */
+	optional fixed32 to  		        = 2;
+
+    /**
+	 * @brief Channel hash (for channel message)
+	 */
+	optional fixed32 channel_hash  		= 3;
+
+    /**
+	 * @brief Frame counter
+	 */
+	uint32 fcnt  		                = 4;
+
+	/**
+	 * @brief TTL
+	 */
+	uint32 ttl  	                    = 5;
+	 	 
+	/**
+	 * @brief Priority
+	 */
+    optional uint32 priority  		    = 6;
+
+	oneof payload {
+	    Advert 		    advert	            = 10;
+	    Ping            ping 			    = 11;
+	    Pong            pong 			    = 12;
+	    Text            text 			    = 13;
+        CompressedText  ctext               = 14
+	    Raw             raw 			    = 15;
+	    LPP             lpp 		        = 16;
+	    TraceRoute      traceroute 		    = 17;
+	    Neighbour       neighbour 		    = 18;
+	    SSID            ssid 		        = 19; // SSID of BLE Beacon of Wifi AP around the node
+        AdminReq        admin_req           = 20;
+        AdminAns        admin_ans           = 21;
+        APRS            aprs                = 22;
+        AIS             ais                 = 23;
+	};
+	
+    /**
+	 * @brief CMAC of the message (use the channel PSK or the DHEC PSK)
+	 */
+	optional fixed32 cmac  	= 3;
+}
+
