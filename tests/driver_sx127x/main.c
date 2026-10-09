@@ -560,6 +560,11 @@ int init_sx1272_cmd(int argc, char **argv)
         return 0;
 }
 
+// TODO add command for setting preamble NETOPT_PREAMBLE_LENGTH
+// TODO add command for setting iq_invert NETOPT_IQ_INVERT
+// TODO add command for measuring noise level
+// TODO add command for testing CAD
+// TODO print airtime for rx and tx
 
 static const shell_command_t shell_commands[] = {
 	{ "init",    "Initialize SX1272",     					init_sx1272_cmd },
