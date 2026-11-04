@@ -83,7 +83,7 @@ Définissez en groupe une [structure commune](../modules/minimesh) pour les mess
 
 ## Echanges de messages texte compressés sur LoRaMesh₍ᐢ֎ﻌ֍ᐢ₎ʃ
 
-[Unishox2](https://github.com/siara-cc/Unishox2) est une bibliothèque de compression de chaines de caractères Unicode. Elle permet de diminuer le poids des massages par deux. Ajoutez la [bibliothèque Arduino](https://github.com/siara-cc/Unishox2/tree/master/Arduino) à votre programme pour échanger des messages textes compressés (type `text_unishox2`).
+[Unishox2](https://github.com/siara-cc/Unishox2) est une bibliothèque de compression de chaines de caractères Unicode. Elle permet de diminuer le poids des massages par deux. Ajoutez le module [`unishox2`](../modules/unishox2) de la [bibliothèque Arduino](https://github.com/siara-cc/Unishox2/tree/master/Arduino) à votre programme pour échanger des messages textes compressés (type `text_unishox2`).
 
 ## Echanges d'images fortement compressées sur LoRaMesh₍ᐢ֎ﻌ֍ᐢ₎ʃ
 
