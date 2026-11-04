@@ -4,7 +4,7 @@
 
 /*
  * Utils for the LoRa Mini Mesh
- *
+ * Author: Didier Donsez
  */
 
 #ifndef LORA_MINI_MESH_H
@@ -24,29 +24,34 @@
 // Payload
 #define LORAMESH_PAYLOAD_TYPE_RAW				(0b000)
 #define LORAMESH_PAYLOAD_TYPE_TEXT				(0b001)
-#define LORAMESH_PAYLOAD_TYPE_TEXT_UNISHOX2		(0b001)
-#define LORAMESH_PAYLOAD_TYPE_IMAGE_AEIC_SE		(0b001)
-#define LORAMESH_PAYLOAD_TYPE_PING				(0b001)
-#define LORAMESH_PAYLOAD_TYPE_TRACEROUTE		(0b001)
-#define LORAMESH_PAYLOAD_TYPE_NEIGHBOUR			(0b001)
-#define LORAMESH_PAYLOAD_TYPE_LPP				(0b001)
+#define LORAMESH_PAYLOAD_TYPE_TEXT_UNISHOX2		(0b010)
+#define LORAMESH_PAYLOAD_TYPE_LPP				(0b011)
+#define LORAMESH_PAYLOAD_TYPE_IMAGE_AEIC_SE		(0b100)
+#define LORAMESH_PAYLOAD_TYPE_PING				(0b101)
+#define LORAMESH_PAYLOAD_TYPE_TRACEROUTE		(0b110)
+#define LORAMESH_PAYLOAD_TYPE_NEIGHBOUR			(0b111)
+// TODO LORAMESH_PAYLOAD_TYPE_TRACEROUTE_REQ
+// TODO LORAMESH_PAYLOAD_TYPE_PONG
+// TODO LORAMESH_PAYLOAD_TYPE_NEIGHBOUR_REQ
+// TODO LORAMESH_PAYLOAD_TYPE_ADMIN_REQ
+// TODO LORAMESH_PAYLOAD_TYPE_ADMIN_ANS
 
 
-
-advert, text, text_unishox2, image_aeic_se, lpp, raw, ping, traceroute, neighbour
+// advert, text, text_unishox2, image_aeic_se, lpp, raw, ping, traceroute, neighbour
 
 /**
  * MeshLoRa MHDR
  */
 struct __attribute__((packed)) LoRaMiniMesh_MHDR {
 	
+	uint8_t rfu :5;
+
+	uint8_t mtype :3; // Fix value (LORAWAN_MTYPE_PROPRIETARY)
+
 	uint8_t hop :3;
 
 	uint8_t payload_type :5;
 
-	uint8_t rfu :5;
-
-	uint8_t mtype :3;
 };
 
 
@@ -58,13 +63,13 @@ typedef struct LoRaMiniMesh_MHDR LoRaMiniMesh_MHDR_t;
  */
 struct __attribute__((packed)) LoRaMiniMesh_Advert {
 
-	uint8_t hop :3;
-
-	uint8_t payload_type :5;
-
 	uint8_t rfu :5;
 
 	uint8_t mtype :3;
+
+	uint8_t hop :3;
+
+	uint8_t payload_type :5;
 
 	// 
 
@@ -80,9 +85,7 @@ struct __attribute__((packed)) LoRaMiniMesh_Advert {
 	// MIC self-signed with public key is appended to the message
 };
 
-
 typedef struct LoRaMiniMesh_Advert LoRaMiniMesh_Advert_t;
-
 
 
 /**
@@ -90,13 +93,13 @@ typedef struct LoRaMiniMesh_Advert LoRaMiniMesh_Advert_t;
  */
 struct __attribute__((packed)) LoRaMiniMesh_Group {
 
-	uint8_t hop :3;
-
-	uint8_t payload_type :5;
-
 	uint8_t rfu :5;
 
 	uint8_t mtype :3;
+
+	uint8_t hop :3;
+
+	uint8_t payload_type :5;
 
 	// 
 
